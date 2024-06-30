@@ -11,8 +11,6 @@ function Navigation() {
   const [selectedPage, setSelectedPage] =
     useRecoilState<string>(selectedNavPage);
 
-  const [selected, setSelected] = useState(false);
-
   const goDashBoard = () => {
     router.push("/dashboard");
     setSelectedPage("대시보드");
