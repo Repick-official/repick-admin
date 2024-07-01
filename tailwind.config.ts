@@ -33,6 +33,7 @@ const config: Config = {
         "text-blue": "#3136C4",
         "text-red": "#EB5147",
         "circle-gray": "#F2F4F7",
+        "background-color": "#F9FAFB",
       },
       fontFamily: {
         pretendard: ["Pretendard", ...fontFamily.sans],
