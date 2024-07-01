@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function PurchaseCurrent() {
+export default function PurchaseCurrent({
+  purchaseRequested,
+  purchaseInTransit,
+  purchaseWaiting,
+  purchaseConfirm,
+}: any) {
   return (
     <div className="w-788pxr h-242pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white mt-20pxr">
       <div className="flex mt-17pxr ml-27pxr">
@@ -12,7 +17,9 @@ export default function PurchaseCurrent() {
 
       <div className="mt-30pxr ml-36pxr w-684pxr flex justify-between items-center">
         <div className="w-117pxr h-117pxr bg-circle-gray rounded-full flex flex-col items-center justify-center">
-          <div className="text-32pxr font-bold leading-48pxr">123</div>
+          <div className="text-32pxr font-bold leading-48pxr">
+            {purchaseRequested}
+          </div>
           <div className="text-14pxr font-medinum leading-21pxr text-text-gray">
             구매 요청
           </div>
@@ -31,7 +38,9 @@ export default function PurchaseCurrent() {
         </svg>
 
         <div className="w-117pxr h-117pxr bg-circle-gray rounded-full flex flex-col items-center justify-center">
-          <div className="text-32pxr font-bold leading-48pxr">24</div>
+          <div className="text-32pxr font-bold leading-48pxr">
+            {purchaseInTransit}
+          </div>
           <div className="text-14pxr font-medinum leading-21pxr text-text-gray">
             발송중
           </div>
@@ -50,7 +59,9 @@ export default function PurchaseCurrent() {
         </svg>
 
         <div className="w-117pxr h-117pxr bg-circle-gray rounded-full flex flex-col items-center justify-center">
-          <div className="text-32pxr font-bold leading-48pxr">3</div>
+          <div className="text-32pxr font-bold leading-48pxr">
+            {purchaseWaiting}
+          </div>
           <div className="text-14pxr font-medinum leading-21pxr text-text-gray">
             구매 확정 대기
           </div>
@@ -69,7 +80,9 @@ export default function PurchaseCurrent() {
         </svg>
 
         <div className="w-117pxr h-117pxr bg-circle-gray rounded-full flex flex-col items-center justify-center">
-          <div className="text-32pxr font-bold leading-48pxr">0</div>
+          <div className="text-32pxr font-bold leading-48pxr">
+            {purchaseConfirm}
+          </div>
           <div className="text-14pxr font-medinum leading-21pxr text-text-gray">
             구매 확정 완료
           </div>
