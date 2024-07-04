@@ -36,6 +36,7 @@ const config: Config = {
         "background-color": "#F9FAFB",
         "text-sub": "#475467",
         "nav-btn": "#1D2939",
+        "box-color": "#D0D5DD",
       },
       fontFamily: {
         pretendard: ["Pretendard", ...fontFamily.sans],
