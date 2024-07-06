@@ -14,3 +14,26 @@ export interface PurchaseCurrentType {
   purchaseWaiting: number;
   purchaseConfirm: number;
 }
+
+export interface OrderStatus {
+  statusCode: number;
+  message: string;
+  result: {
+    content: [
+      {
+        productOrderId: number;
+        productCode: string;
+        productName: string;
+        userName: string;
+        userAddress: string;
+        userPhoneNumber: string;
+        state: string;
+        trackingNumber: string;
+        isConfirmed: boolean;
+        confirmRemainingDays: number;
+      }
+    ];
+    totalPages: number;
+    totalElements: number;
+  };
+}
