@@ -22,7 +22,14 @@ export default function RequestReturn() {
   return (
     <div className="w-1216pxr h-1038pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white ml-32pxr">
       <div className="mt-28pxr ml-40pxr w-1144pxr">
-        <div className="text-16pxr font-medium leading-24pxr">전체 24개</div>
+        <div className="flex">
+          <div className="text-16pxr font-medium leading-24pxr">전체 24개</div>
+          <div className="w-91pxr h-36pxr bg-nav-color rounded-10pxr flex items-center justify-center ml-auto">
+            <div className="text-13pxr font-medium leading-19pxr text-white">
+              업데이트
+            </div>
+          </div>
+        </div>
         <div className="bg-circle-gray h-48pxr flex mt-24pxr">
           <div className="text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
             <div className="ml-18pxr w-91pxr">상품 코드</div>

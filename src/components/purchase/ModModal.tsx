@@ -4,7 +4,10 @@ import DelOrModBtn from "./DelOrModBtn";
 export default function ModModal({ onClose }: any) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-nav-color bg-opacity-50">
-      <div className="bg-white w-1000pxr h-620pxr rounded-10pxr ">
+      <div
+        className="bg-white w-1000pxr h-620pxr rounded-10pxr"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mx-40pxr mt-40pxr">
           <div className="flex">
             <div className="text-24pxr font-bold leading-36pxr">구매 정보</div>
