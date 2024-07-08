@@ -4,24 +4,27 @@ import { useState, useEffect } from "react";
 import classNames from "classnames";
 import RequestPurchase from "@/components/purchase/RequestPurchase";
 import RequestReturn from "@/components/purchase/RequestReturn";
-import { getRequestPurchase, registerTrackingNumber } from "@/api/request";
+import { getRequestPurchase, getRequestReturn } from "@/api/request";
 import { OrderStatus } from "@/interface/interface";
 
 function purchase() {
   const [isSelected, setIsSelected] = useState(true);
 
   const [orders, setOrders] = useState<OrderStatus | null>(null);
-
+  const [returns, setReturns] = useState<OrderStatus | null>(null);
   const ReturnNum = 5;
 
   useEffect(() => {
     const fetchItem = async () => {
-      const response = await getRequestPurchase("0", "4");
-      setOrders(response);
+      const requestPurchase = await getRequestPurchase("0", "4");
+      const requestReturn = await getRequestReturn("0", "4");
+      setOrders(requestPurchase);
+      setReturns(requestReturn);
     };
     fetchItem();
   }, []);
-  console.log("orders", orders);
+  console.log("ordersssss", orders);
+  console.log("returnssss", returns);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -101,7 +104,7 @@ function purchase() {
             {isSelected ? (
               <RequestPurchase orders={orders} />
             ) : (
-              <RequestReturn />
+              <RequestReturn returns={returns} />
             )}
           </div>
         </div>

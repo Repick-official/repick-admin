@@ -40,3 +40,6 @@ export interface OrderStatus {
 export interface RequestPurchaseProps {
   orders: OrderStatus | null;
 }
+export interface RequestReturnProps {
+  returns: OrderStatus | null;
+}
