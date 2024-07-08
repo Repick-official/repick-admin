@@ -37,3 +37,6 @@ export interface OrderStatus {
     totalElements: number;
   };
 }
+export interface RequestPurchaseProps {
+  orders: OrderStatus | null;
+}

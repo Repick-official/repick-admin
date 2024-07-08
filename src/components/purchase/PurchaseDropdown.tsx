@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ModModal from "./ModModal";
 import DelModal from "./DelModal";
 
-export default function PurchaseDropdown() {
+export default function PurchaseDropdown({ item }: any) {
   const [mod, setMod] = useState(false);
   const [del, setDel] = useState(false);
 
@@ -17,7 +17,7 @@ export default function PurchaseDropdown() {
           <li onClick={() => setDel(true)}>삭제하기</li>
         </div>
       </div>
-      {mod && <ModModal onClose={() => setMod(false)} />}
+      {mod && <ModModal onClose={() => setMod(false)} item={item} />}
       {del && <DelModal onClose={() => setDel(false)} />}
     </div>
   );

@@ -1,16 +1,27 @@
 "use client";
 import MainTitle from "@/components/titles/MainTitle";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames";
 import RequestPurchase from "@/components/purchase/RequestPurchase";
 import RequestReturn from "@/components/purchase/RequestReturn";
+import { getRequestPurchase, registerTrackingNumber } from "@/api/request";
+import { OrderStatus } from "@/interface/interface";
 
 function purchase() {
-  const [isPurchase, setIsPurchase] = useState(true);
   const [isSelected, setIsSelected] = useState(true);
 
-  const purchaseNum = 24;
+  const [orders, setOrders] = useState<OrderStatus | null>(null);
+
   const ReturnNum = 5;
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      const response = await getRequestPurchase("0", "4");
+      setOrders(response);
+    };
+    fetchItem();
+  }, []);
+  console.log("orders", orders);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -34,7 +45,7 @@ function purchase() {
                 구매 신청
               </div>
               <div className="text-18pxr font-bold leading-27pxr ml-8pxr">
-                {purchaseNum}
+                {orders ? orders.result.totalElements : 0}
               </div>
               <div className="ml-auto mr-14pxr">
                 <svg
@@ -86,7 +97,13 @@ function purchase() {
             </div>
           </div>
 
-          <div>{isSelected ? <RequestPurchase /> : <RequestReturn />}</div>
+          <div>
+            {isSelected ? (
+              <RequestPurchase orders={orders} />
+            ) : (
+              <RequestReturn />
+            )}
+          </div>
         </div>
       </div>
     </div>
