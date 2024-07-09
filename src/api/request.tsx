@@ -64,7 +64,10 @@ export const getRequestReturn = async (page: string, size: string) => {
   }
 };
 
-export const updateOrderState = async (productOrderId: string) => {
+export const updateOrderState = async (
+  productOrderId: string,
+  newState: string
+) => {
   try {
     const response = await fetch(
       process.env.API_URL + `/order/${productOrderId}/state`,
@@ -73,6 +76,7 @@ export const updateOrderState = async (productOrderId: string) => {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ state: newState }),
       }
     );
     if (response.ok) {
