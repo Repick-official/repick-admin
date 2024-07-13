@@ -17,15 +17,19 @@ function Navigation() {
   };
   const goWardrobe = () => {
     router.push("/wardrobe");
-    setSelectedPage("옷장 정리");
+    setSelectedPage("옷장 정리 현황");
   };
   const goPurchaseInfo = () => {
     router.push("/purchase");
-    setSelectedPage("구매 정보");
+    setSelectedPage("구매 정보 현황");
   };
   const goItemManage = () => {
     router.push("/item");
-    setSelectedPage("상품 관리");
+    setSelectedPage("상품 등록");
+  };
+  const goTotalItem = () => {
+    router.push("/totalItem");
+    setSelectedPage("상품 종합 현황");
   };
 
   return (
@@ -48,30 +52,39 @@ function Navigation() {
             </div>
             <div
               className={classNames("pb-24pxr cursor-pointer", {
-                "text-white": selectedPage === "옷장 정리",
-                "text-unSelected-color": selectedPage !== "옷장 정리",
-              })}
-              onClick={() => goWardrobe()}
-            >
-              {"옷장 정리"}
-            </div>
-            <div
-              className={classNames("pb-24pxr cursor-pointer", {
-                "text-white": selectedPage === "구매 정보",
-                "text-unSelected-color": selectedPage !== "구매 정보",
+                "text-white": selectedPage === "구매 정보 현황",
+                "text-unSelected-color": selectedPage !== "구매 정보 현황",
               })}
               onClick={() => goPurchaseInfo()}
             >
-              {"구매 정보"}
+              {"구매 정보 현황"}
             </div>
             <div
               className={classNames("pb-24pxr cursor-pointer", {
-                "text-white": selectedPage === "상품 관리",
-                "text-unSelected-color": selectedPage !== "상품 관리",
+                "text-white": selectedPage === "옷장 정리 현황",
+                "text-unSelected-color": selectedPage !== "옷장 정리 현황",
+              })}
+              onClick={() => goWardrobe()}
+            >
+              {"옷장 정리 현황"}
+            </div>
+            <div
+              className={classNames("pb-24pxr cursor-pointer", {
+                "text-white": selectedPage === "상품 등록",
+                "text-unSelected-color": selectedPage !== "상품 등록",
               })}
               onClick={() => goItemManage()}
             >
-              {"상품 관리"}
+              {"상품 등록"}
+            </div>
+            <div
+              className={classNames("pb-24pxr cursor-pointer", {
+                "text-white": selectedPage === "상품 종합 현황",
+                "text-unSelected-color": selectedPage !== "상품 종합 현황",
+              })}
+              onClick={() => goTotalItem()}
+            >
+              {"상품 종합 현황"}
             </div>
           </div>
         </div>

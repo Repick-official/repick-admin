@@ -80,6 +80,7 @@ export const updateOrderState = async (
       }
     );
     if (response.ok) {
+      console.log("ok");
       const data = await response.json();
       return data;
     } else {
