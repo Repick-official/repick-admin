@@ -20,7 +20,10 @@ export const getRequestPurchase = async (page: string, size: string) => {
   }
 };
 
-export const registerTrackingNumber = async (productOrderId: string) => {
+export const registerTrackingNumber = async (
+  productOrderId: string,
+  newTrackingNumber: string
+) => {
   try {
     const response = await fetch(
       process.env.API_URL + `/order/${productOrderId}/tracking-number`,
@@ -29,6 +32,7 @@ export const registerTrackingNumber = async (productOrderId: string) => {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ trackingNumber: newTrackingNumber }),
       }
     );
     if (response.ok) {
@@ -64,7 +68,10 @@ export const getRequestReturn = async (page: string, size: string) => {
   }
 };
 
-export const updateOrderState = async (productOrderId: string) => {
+export const updateOrderState = async (
+  productOrderId: string,
+  newState: string
+) => {
   try {
     const response = await fetch(
       process.env.API_URL + `/order/${productOrderId}/state`,
@@ -73,9 +80,11 @@ export const updateOrderState = async (productOrderId: string) => {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ state: newState }),
       }
     );
     if (response.ok) {
+      console.log("ok");
       const data = await response.json();
       return data;
     } else {

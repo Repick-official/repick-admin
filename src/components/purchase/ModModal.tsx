@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import DelOrModBtn from "./DelOrModBtn";
 import { registerTrackingNumber } from "@/api/request";
 
-export default function ModModal({ onClose, item }: any) {
+export default function ModModal({ onClose, item, setItems }: any) {
   const [trackingNumber, setTrackingNumber] = useState(item.trackingNumber);
 
-  const handleSave = async () => {
+  const handleSave = async (newTrackingNumber: string) => {
     try {
-      await registerTrackingNumber(item.productOrderId.toString());
+      await registerTrackingNumber(item.productOrderId, newTrackingNumber);
+      setItems((prevItems: any) =>
+        prevItems.map((it: any) =>
+          it.productOrderId === item.productOrderId
+            ? { ...it, trackingNumber: newTrackingNumber }
+            : it
+        )
+      );
       onClose();
     } catch (error) {
       console.error("Failed to update tracking number:", error);
@@ -17,13 +24,15 @@ export default function ModModal({ onClose, item }: any) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-nav-color bg-opacity-50">
       <div
-        className="bg-white w-1000pxr h-620pxr rounded-10pxr"
+        className="bg-white w-1000pxr h-286pxr rounded-10pxr"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-40pxr mt-40pxr">
           <div className="flex">
-            <div className="text-24pxr font-bold leading-36pxr">구매 정보</div>
-            <div className="ml-auto " onClick={onClose}>
+            <div className="text-24pxr font-bold leading-36pxr">
+              운송장 번호 추가
+            </div>
+            <div className="ml-auto cursor-pointer" onClick={onClose}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="32"
@@ -39,43 +48,12 @@ export default function ModModal({ onClose, item }: any) {
             </div>
           </div>
 
-          <div className="mt-44pxr">
+          <div className="mt-28pxr">
             <div className="text-18pxr font-medium leading-27pxr text-text-sub ">
               <div className="flex items-center">
-                <div className="w-81pxr">상품 코드</div>
-                <div className="ml-20pxr w-347pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color">
-                  {item.productCode}
-                </div>
-              </div>
-              <div className="flex items-center mt-16pxr">
-                <div className="w-81pxr">상품명</div>
-                <div className="ml-20pxr w-819pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color">
-                  {item.productName}
-                </div>
-              </div>
-              <div className="flex items-center mt-16pxr">
-                <div className="w-81pxr">이름</div>
-                <div className="ml-20pxr w-347pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color">
-                  {item.userName}
-                </div>
-              </div>
-
-              <div className="flex items-center mt-16pxr">
-                <div className="w-81pxr">주소</div>
-                <div className="ml-20pxr w-819pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color">
-                  {item.userAddress}
-                </div>
-              </div>
-              <div className="flex items-center mt-16pxr">
-                <div className="w-81pxr">전화번호</div>
-                <div className="ml-20pxr w-347pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color">
-                  {item.userPhoneNumber}
-                </div>
-              </div>
-              <div className="flex items-center mt-16pxr">
                 <div className="w-81pxr">운송장번호</div>
                 <input
-                  className="ml-20pxr w-819pxr h-48pxr pt-10pxr pl-16pxr pr-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color"
+                  className="ml-20pxr w-819pxr h-48pxr py-10pxr px-16pxr rounded-8pxr border-1pxr border-solid border-box-color text-18pxr font-medium leading-27pxr text-nav-color"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
                 />
@@ -88,7 +66,7 @@ export default function ModModal({ onClose, item }: any) {
               <div className="mr-28pxr" onClick={onClose}>
                 <DelOrModBtn content="취소하기" />
               </div>
-              <div onClick={handleSave}>
+              <div onClick={() => handleSave(trackingNumber)}>
                 <DelOrModBtn content="저장하기" />
               </div>
             </div>

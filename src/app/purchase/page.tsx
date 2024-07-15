@@ -12,7 +12,6 @@ function purchase() {
 
   const [orders, setOrders] = useState<OrderStatus | null>(null);
   const [returns, setReturns] = useState<OrderStatus | null>(null);
-  const ReturnNum = 5;
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -81,7 +80,7 @@ function purchase() {
                 반품 신청
               </div>
               <div className="text-18pxr font-bold leading-27pxr ml-8pxr">
-                {ReturnNum}
+                {returns ? returns.result.totalElements : 0}
               </div>
               <div className="ml-auto mr-14pxr">
                 <svg
