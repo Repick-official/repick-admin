@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 export default function ReturnDropdown({ item, setItems }: any) {
   const [currentState, setCurrentState] = useState(item.state);
 
-  const handleStateChande = async (newState: string) => {
+  const handleStateChange = async (newState: string) => {
     try {
       await updateOrderState(item.productOrderId, newState);
       setCurrentState(newState);
@@ -30,7 +30,7 @@ export default function ReturnDropdown({ item, setItems }: any) {
               className={`w-171pxr h-36pxr pt-8pxr pl-17pxr pb-8pxr hover:bg-circle-gray ${
                 currentState === state ? "font-bold" : ""
               }`}
-              onClick={() => handleStateChande(state)}
+              onClick={() => handleStateChange(state)}
             >
               {state}
             </li>
