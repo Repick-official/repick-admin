@@ -9,7 +9,7 @@ function wardrobe() {
     <div className="mt-69pxr ml-104pxr">
       <div>
         <MainTitle mainTitleName="옷장 정리 현황" />
-        <div className="w-694pxr">
+        <div>
           <TopInfo total={total} />
           <WardrobeContent />
         </div>
