@@ -124,18 +124,18 @@ export default function WardrobeContent() {
     //   </div>
     // </div>
     <div className="w-1262pxr h-54pxr bg-circle-gray mt-16pxr text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
-      <div className="ml-18pxr">유저 코드</div>
-      <div className="ml-25pxr">이름</div>
-      <div className="ml-60pxr">수거방식</div>
-      <div className="ml-48pxr">현황</div>
-      <div className="ml-139pxr">신청일</div>
-      <div className="ml-45pxr">수거 진행 여부</div>
-      <div className="ml-34pxr">상품화 시작일</div>
-      <div className="ml-32pxr">판매기간</div>
-      <div className="ml-85pxr">정산신청</div>
-      <div className="ml-36pxr">정산완료</div>
-      <div className="ml-35pxr">리젝 상품</div>
-      <div className="ml-45pxr">판매만료 리턴</div>
+      <div className="ml-18pxr w-54pxr">유저 코드</div>
+      <div className="ml-25pxr w-26pxr">이름</div>
+      <div className="ml-60pxr w-51pxr">수거방식</div>
+      <div className="ml-48pxr w-26pxr">현황</div>
+      <div className="ml-139pxr w-38pxr">신청일</div>
+      <div className="ml-45pxr w-82pxr">수거 진행 여부</div>
+      <div className="ml-34pxr w-79pxr">상품화 시작일</div>
+      <div className="ml-32pxr w-51pxr">판매기간</div>
+      <div className="ml-85pxr w-51pxr">정산신청</div>
+      <div className="ml-36pxr w-51pxr">정산완료</div>
+      <div className="ml-35pxr w-54pxr">리젝 상품</div>
+      <div className="ml-45pxr w-79pxr">판매만료 리턴</div>
     </div>
   );
 }
