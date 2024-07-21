@@ -1,5 +1,5 @@
 "use client";
-import PurchaseDropdown from "./PurchaseItem";
+import PurchaseDropdown from "../requestPurchase/PurchaseItem";
 import { useState, useEffect } from "react";
 import ReturnDropdown from "./ReturnDropdown";
 import {

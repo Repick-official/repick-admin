@@ -1,5 +1,5 @@
 import React from "react";
-import DelOrModBtn from "./DelOrModBtn";
+import DelOrModBtn from "./requestPurchase/DelOrModBtn";
 
 export default function DelModal({ onClose }: any) {
   return (

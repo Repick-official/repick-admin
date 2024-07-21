@@ -2,8 +2,8 @@
 import MainTitle from "@/components/titles/MainTitle";
 import { useState, useEffect } from "react";
 import classNames from "classnames";
-import RequestPurchase from "@/components/purchase/RequestPurchase";
-import RequestReturn from "@/components/purchase/RequestReturn";
+import RequestPurchase from "@/components/purchase/requestPurchase/RequestPurchase";
+import RequestReturn from "@/components/purchase/requestReturn/RequestReturn";
 import { getRequestPurchase, getRequestReturn } from "@/api/request";
 import { OrderStatus } from "@/interface/interface";
 
