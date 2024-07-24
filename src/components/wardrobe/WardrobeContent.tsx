@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import Dropdown from "./Dropdown";
 import UserList from "./UserList";
 
 export default function WardrobeContent() {
