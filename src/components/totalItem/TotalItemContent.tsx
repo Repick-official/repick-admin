@@ -1,7 +1,7 @@
 import React from "react";
 import UserItemList from "./UserItemList";
 
-export default function TotalItemContent() {
+export default function TotalItemContent({ clothing }: any) {
   return (
     <div>
       <div className="w-1262pxr h-54pxr bg-circle-gray mt-16pxr text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
@@ -16,7 +16,7 @@ export default function TotalItemContent() {
       </div>
 
       <div>
-        <UserItemList />
+        <UserItemList clothing={clothing} />
       </div>
     </div>
   );
