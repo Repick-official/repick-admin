@@ -5,10 +5,10 @@ import {
   RequestReturnProps,
 } from "@/interface/interface";
 
-export default function SellingOrSold(items: any) {
+export default function SellingOrSold(content: any) {
   const [view, setView] = useState<{ [key: number]: boolean }>({});
-  console.log("items", items.items.result);
-  const [userItems, setUserItems] = useState(items.items.result);
+  console.log("content", content.content.result.content);
+  const [userItems, setUserItems] = useState(content.content.result.content);
 
   const handleClickOutside = (event: any) => {
     if (

@@ -8,7 +8,7 @@ export default function UserItemList({ clothing }: any) {
 
   return (
     <div>
-      {clothing?.result.map((item: any) => (
+      {clothing?.result.content.map((item: any) => (
         <div>
           <div className="w-1262pxr h-53pxr text-14pxr font-medium leading-21pxr text-text-sub flex items-center">
             <div className="ml-18pxr w-104pxr">{item.code}</div>

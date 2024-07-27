@@ -108,7 +108,7 @@ export default function page() {
               )
             )}
           </div>
-          <SellingOrSold items={items} />
+          <SellingOrSold content={items} />
         </div>
 
         {/* <div className="mt-24pxr">

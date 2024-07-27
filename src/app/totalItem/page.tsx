@@ -19,14 +19,14 @@ function totalitem() {
     fetchItem();
   }, []);
 
-  console.log(clothing?.result.length);
+  console.log(clothing?.result.content.length);
 
   return (
     <div className="mt-69pxr ml-104pxr">
       <div>
         <MainTitle mainTitleName="상품 종합 현황" />
         <div>
-          <TopInfo total={clothing?.result.length} />
+          <TopInfo total={clothing?.result.content.length} />
           <TotalItemContent clothing={clothing} />
         </div>
       </div>
