@@ -17,6 +17,8 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
       !event.target.closest(".dropdown-container")
     ) {
       setView({});
+      {
+      }
     }
   };
 
