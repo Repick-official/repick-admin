@@ -1,9 +1,22 @@
 "use client";
 import MainTitle from "@/components/titles/MainTitle";
 import { useState, useEffect } from "react";
+import { getClothingSalesDetails } from "@/api/request";
 import classNames from "classnames";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+import SellingOrSold from "@/components/totalItem/\buser/SellingOrSold";
+import { ClothingSalesItemStatus } from "@/interface/interface";
 
 export default function page() {
+  const path = usePathname().split("/");
+
+  const userId = Number(path[3]);
+  const clothingSalesCount = Number(path[4]);
+
+  const [items, setItems] = useState<ClothingSalesItemStatus | null>(null);
+
   const [selectedButtons, setSelectedButtons] = useState([
     true,
     false,
@@ -16,6 +29,21 @@ export default function page() {
     const updatedButtons = selectedButtons.map((_, i) => i === index);
     setSelectedButtons(updatedButtons);
   };
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      const requestPurchase = await getClothingSalesDetails(
+        userId,
+        clothingSalesCount,
+        "SELLING",
+        "0",
+        "4"
+      );
+      console.log("requestPurchase", requestPurchase);
+      setItems(requestPurchase);
+    };
+    fetchItem();
+  }, []);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -80,6 +108,7 @@ export default function page() {
               )
             )}
           </div>
+          <SellingOrSold content={items} />
         </div>
 
         {/* <div className="mt-24pxr">

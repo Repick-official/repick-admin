@@ -1,19 +1,36 @@
+"use client";
 import MainTitle from "@/components/titles/MainTitle";
 import TotalItemContent from "@/components/totalItem/TotalItemContent";
 import TopInfo from "@/components/wardrobe/TopInfo";
-const total = 12;
+import { useState, useEffect } from "react";
+import { getClothingSales } from "@/api/request";
+import { ClothingSalesStatus } from "@/interface/interface";
 
-function item() {
+function totalitem() {
+  const [clothing, setClothing] = useState<ClothingSalesStatus | null>(null);
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      const requestPurchase = await getClothingSales("0", "4");
+      setClothing(requestPurchase);
+
+      console.log("requestPurchase", requestPurchase);
+    };
+    fetchItem();
+  }, []);
+
+  console.log(clothing?.result.content.length);
+
   return (
     <div className="mt-69pxr ml-104pxr">
       <div>
         <MainTitle mainTitleName="상품 종합 현황" />
         <div>
-          <TopInfo total={total} />
-          <TotalItemContent />
+          <TopInfo total={clothing?.result.content.length} />
+          <TotalItemContent clothing={clothing} />
         </div>
       </div>
     </div>
   );
 }
-export default item;
+export default totalitem;

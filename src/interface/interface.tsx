@@ -43,3 +43,44 @@ export interface RequestPurchaseProps {
 export interface RequestReturnProps {
   returns: OrderStatus | null;
 }
+export interface ClothingSalesStatus {
+  statusCode: number;
+  message: string;
+  result: {
+    content: [
+      {
+        code: string;
+        name: string;
+        userId: number;
+        clothingSalesCount: number;
+        totalQuantity: number;
+        sellingQuantity: number;
+        soldQuantity: number;
+        rejectedQuantity: number;
+        expiredQuantity: number;
+        weight: number;
+        createdDate: string;
+      }
+    ];
+  };
+}
+export interface ClothingSalesItemStatus {
+  statusCode: number;
+  message: string;
+  result: {
+    content: [
+      {
+        productCode: string;
+        thumbnailImageUrl: string;
+        productName: string;
+        grade: string;
+        salesPeriod: string;
+        salesPrice: number;
+        settlementPrice: number;
+        fee: number;
+        requestDate: string;
+        isReturned: boolean;
+      }
+    ];
+  };
+}
