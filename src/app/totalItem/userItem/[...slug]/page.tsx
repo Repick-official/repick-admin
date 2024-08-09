@@ -67,7 +67,7 @@ export default function page() {
           </div>
         </div>
 
-        <div className="mt-51pxr flex flex-row">
+        {/* <div className="mt-51pxr flex flex-row"> 여기 api가 어디로.. 갔지?
           <div>
             {["판매 중", "판매 완료", "리젝 상품", "만료 상품", "KG 매입"].map(
               (title, index) => (
@@ -109,7 +109,7 @@ export default function page() {
             )}
           </div>
           <SellingOrSold content={items} />
-        </div>
+        </div> */}
 
         {/* <div className="mt-24pxr">
               {selectedButtons[0] && <RequestPurchase orders={orders} />}
