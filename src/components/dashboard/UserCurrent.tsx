@@ -1,6 +1,14 @@
 import React from "react";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 export default function UserCurrent() {
+  const data = [
+    { name: "여자", value: 64 },
+    { name: "남자", value: 36 },
+  ];
+
+  const COLORS = ["#F76056", "#439AFF"];
+
   return (
     <div className="w-466pxr h-504pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white ml-19pxr">
       <div className="ml-31pxr mt-27pxr">
@@ -49,6 +57,27 @@ export default function UserCurrent() {
           <div className="pl-27pxr pt-24pxr">
             <div className="text-16pxr font-medium leading-24pxr text-text-sub">
               유저 성별
+            </div>
+            <div>
+              <PieChart width={168} height={168}>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
             </div>
           </div>
         </div>
