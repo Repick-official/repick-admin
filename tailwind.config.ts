@@ -37,6 +37,9 @@ const config: Config = {
         "text-sub": "#475467",
         "nav-btn": "#1D2939",
         "box-color": "#D0D5DD",
+        "text-green": "#3DC061",
+        "chart-red": "#F76056",
+        "chart-blue": "#439AFF",
       },
       fontFamily: {
         pretendard: ["Pretendard", ...fontFamily.sans],
