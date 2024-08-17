@@ -62,6 +62,7 @@ export interface ClothingSalesStatus {
         createdDate: string;
       }
     ];
+    totalElements: number;
   };
 }
 export interface ClothingSalesItemStatus {

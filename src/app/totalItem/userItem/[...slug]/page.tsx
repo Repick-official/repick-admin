@@ -8,14 +8,16 @@ import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import SellingOrSold from "@/components/totalItem/\buser/SellingOrSold";
 import { ClothingSalesItemStatus } from "@/interface/interface";
+import { it } from "node:test";
+import item from "@/app/item/page";
 
 export default function page() {
   const path = usePathname().split("/");
 
-  const userId = Number(path[3]);
+  const clothingSalesId = Number(path[3]);
   const clothingSalesCount = Number(path[4]);
 
-  const [items, setItems] = useState<ClothingSalesItemStatus | null>(null);
+  const [items, setItems] = useState<any>(null);
 
   const [selectedButtons, setSelectedButtons] = useState([
     true,
@@ -33,9 +35,8 @@ export default function page() {
   useEffect(() => {
     const fetchItem = async () => {
       const requestPurchase = await getClothingSalesDetails(
-        userId,
-        clothingSalesCount,
-        "SELLING",
+        clothingSalesId,
+        "selling",
         "0",
         "4"
       );
@@ -67,10 +68,16 @@ export default function page() {
           </div>
         </div>
 
-        {/* <div className="mt-51pxr flex flex-row"> 여기 api가 어디로.. 갔지?
-          <div>
-            {["판매 중", "판매 완료", "리젝 상품", "만료 상품", "KG 매입"].map(
-              (title, index) => (
+        {
+          <div className="mt-51pxr flex flex-row">
+            <div>
+              {[
+                "판매 중",
+                "판매 완료",
+                "리젝 상품",
+                "만료 상품",
+                "KG 매입",
+              ].map((title, index) => (
                 <div
                   key={index}
                   className={classNames(
@@ -105,11 +112,11 @@ export default function page() {
                     </svg>
                   </div>
                 </div>
-              )
-            )}
+              ))}
+            </div>
+            <SellingOrSold clothing={items} />
           </div>
-          <SellingOrSold content={items} />
-        </div> */}
+        }
 
         {/* <div className="mt-24pxr">
               {selectedButtons[0] && <RequestPurchase orders={orders} />}

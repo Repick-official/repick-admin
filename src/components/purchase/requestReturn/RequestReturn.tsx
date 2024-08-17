@@ -114,7 +114,7 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
                   <ReturnDropdown item={item} setItems={setItems} />
                 )}
               </ul>
-              <div className="flex ml-auto mr-26pxr">
+              {/* <div className="flex ml-auto mr-26pxr">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -135,7 +135,7 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
                     fill="#727B88"
                   />
                 </svg>
-              </div>
+              </div> */}
             </div>
             <div className="h-1pxr w-full bg-dark-gray"></div>
           </div>

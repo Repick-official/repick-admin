@@ -5,10 +5,11 @@ import {
   RequestReturnProps,
 } from "@/interface/interface";
 
-export default function SellingOrSold(content: any) {
+export default function SellingOrSold(clothing: any) {
   const [view, setView] = useState<{ [key: number]: boolean }>({});
-  console.log("content", content.content.result.content);
-  const [userItems, setUserItems] = useState(content.content.result.content);
+
+  const [userItems, setUserItems] = useState<any>(clothing.result?.content);
+  console.log("useritems", userItems);
 
   const handleClickOutside = (event: any) => {
     if (
@@ -54,7 +55,7 @@ export default function SellingOrSold(content: any) {
           </div>
         </div>
 
-        {userItems.map((item: any) => (
+        {userItems?.map((item: any) => (
           <div>
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
@@ -108,7 +109,7 @@ export default function SellingOrSold(content: any) {
                 </div>
                 {/* {view[item.productOrderId] && (
                   <ReturnDropdown item={item} setItems={setItems} />
-                )} */}
+                )}  */}
               </ul>
             </div>
             <div className="h-1pxr w-full bg-dark-gray"></div>

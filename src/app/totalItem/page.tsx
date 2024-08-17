@@ -11,7 +11,7 @@ function totalitem() {
 
   useEffect(() => {
     const fetchItem = async () => {
-      const requestPurchase = await getClothingSales("0", "4");
+      const requestPurchase = await getClothingSales(3, "0", "4");
       setClothing(requestPurchase);
 
       console.log("requestPurchase", requestPurchase);
@@ -26,7 +26,7 @@ function totalitem() {
       <div>
         <MainTitle mainTitleName="상품 종합 현황" />
         <div>
-          <TopInfo total={clothing?.result.content.length} />
+          <TopInfo total={clothing?.result.totalElements} />
           <TotalItemContent clothing={clothing} />
         </div>
       </div>

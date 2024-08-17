@@ -36,9 +36,7 @@ function dashboard() {
             returnRequested={returnRequested}
           />
         </div>
-        <div>
-          <UserCurrent />
-        </div>
+        <div>{/* <UserCurrent /> */}</div>
       </div>
     </div>
   );

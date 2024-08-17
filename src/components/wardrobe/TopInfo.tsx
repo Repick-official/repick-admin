@@ -4,7 +4,9 @@ export default function TopInfo({ total }: any) {
   return (
     <div className="flex items-center mt-39pxr w-1262pxr">
       <div className="text-16pxr font-medium leading-24pxr">
-        <div>전체 {total}개</div>
+        <div className="flex">
+          전체 <div className="text-text-blue ml-5pxr">{total}</div>개
+        </div>
       </div>
 
       <div className="flex items-center ml-auto">
