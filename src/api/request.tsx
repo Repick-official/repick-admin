@@ -175,3 +175,24 @@ export const getClothingSalesStatus = async (
     throw error;
   }
 };
+export const getDashboardToday = async () => {
+  try {
+    const response = await fetch(
+      process.env.API_URL + `/clothing-sales/today`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
