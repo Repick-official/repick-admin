@@ -5,27 +5,29 @@ import PickupCurrent from "@/components/dashboard/PickupCurrent";
 import PurchaseCurrent from "@/components/dashboard/PurchaseCurrent";
 import UserCurrent from "@/components/dashboard/UserCurrent";
 import { useEffect, useState } from "react";
-import { getDashboardClothing, getDashboardToday } from "@/api/request";
+import {
+  getDashboardClothing,
+  getDashboardOrder,
+  getDashboardToday,
+} from "@/api/request";
 
 function dashboard() {
   const [todayState, setTodayState] = useState<any>(null);
   const [clothingState, setClothingState] = useState<any>(null);
-  const purchaseRequested = 123;
-  const purchaseInTransit = 24;
-  const purchaseWaiting = 3;
-  const purchaseConfirm = 1234;
-  const returnRequested = 0;
+  const [orderState, setOrderState] = useState<any>(null);
 
   useEffect(() => {
     const fetchItem = async () => {
       const today = await getDashboardToday();
       const clothing = await getDashboardClothing();
+      const order = await getDashboardOrder();
       setTodayState(today);
       setClothingState(clothing);
+      setOrderState(order);
     };
     fetchItem();
   }, []);
-  console.log("clothing", clothingState?.result);
+  console.log("order", orderState);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -53,11 +55,11 @@ function dashboard() {
             }
           />
           <PurchaseCurrent
-            purchaseRequested={}
-            purchaseInTransit={}
-            purchaseWaiting={}
-            purchaseConfirm={}
-            returnRequested={}
+            purchaseRequested={orderState?.result.paymentCompletedCount}
+            purchaseInTransit={orderState?.result.shippingCount}
+            purchaseWaiting={orderState?.result.confirmWaitCount}
+            purchaseConfirm={orderState?.result.confirmedCount}
+            returnRequested={orderState?.result.returnRequestCount}
           />
         </div>
         <div>
