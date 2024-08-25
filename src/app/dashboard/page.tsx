@@ -5,14 +5,11 @@ import PickupCurrent from "@/components/dashboard/PickupCurrent";
 import PurchaseCurrent from "@/components/dashboard/PurchaseCurrent";
 import UserCurrent from "@/components/dashboard/UserCurrent";
 import { useEffect, useState } from "react";
-import { getDashboardToday } from "@/api/request";
+import { getDashboardClothing, getDashboardToday } from "@/api/request";
 
 function dashboard() {
-  const totalPickup = 12;
-  const totalPaymentCompleted = 12;
-  const totalReturnRequested = 3;
   const [todayState, setTodayState] = useState<any>(null);
-
+  const [clothingState, setClothingState] = useState<any>(null);
   const purchaseRequested = 123;
   const purchaseInTransit = 24;
   const purchaseWaiting = 3;
@@ -22,11 +19,13 @@ function dashboard() {
   useEffect(() => {
     const fetchItem = async () => {
       const today = await getDashboardToday();
+      const clothing = await getDashboardClothing();
       setTodayState(today);
+      setClothingState(clothing);
     };
     fetchItem();
   }, []);
-  console.log("today", todayState?.result);
+  console.log("clothing", clothingState?.result);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -40,13 +39,25 @@ function dashboard() {
       </div>
       <div className="mt-24pxr flex">
         <div>
-          <PickupCurrent />
+          <PickupCurrent
+            collectionRequestCount={
+              clothingState?.result.collectionRequestCount
+            }
+            collectingCount={clothingState?.result.collectingCount}
+            productionCompleteCount={
+              clothingState?.result.productionCompleteCount
+            }
+            sellingCount={clothingState?.result.sellingCount}
+            settlementRequestCount={
+              clothingState?.result.settlementRequestCount
+            }
+          />
           <PurchaseCurrent
-            purchaseRequested={purchaseRequested}
-            purchaseInTransit={purchaseInTransit}
-            purchaseWaiting={purchaseWaiting}
-            purchaseConfirm={purchaseConfirm}
-            returnRequested={returnRequested}
+            purchaseRequested={}
+            purchaseInTransit={}
+            purchaseWaiting={}
+            purchaseConfirm={}
+            returnRequested={}
           />
         </div>
         <div>
