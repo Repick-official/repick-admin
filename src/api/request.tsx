@@ -149,6 +149,28 @@ export const getClothingSalesDetails = async (
     throw error;
   }
 };
+
+export const getUserInfo = async (clothingSalesId: number) => {
+  try {
+    const response = await fetch(
+      process.env.API_URL + `/clothing-sales/${clothingSalesId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 export const getClothingSalesStatus = async (
   page: string,
   size: string

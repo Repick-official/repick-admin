@@ -1,7 +1,7 @@
 "use client";
 import MainTitle from "@/components/titles/MainTitle";
 import { useState, useEffect } from "react";
-import { getClothingSalesDetails } from "@/api/request";
+import { getClothingSalesDetails, getUserInfo } from "@/api/request";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -18,6 +18,7 @@ export default function page() {
   const clothingSalesCount = Number(path[4]);
 
   const [items, setItems] = useState<any>(null);
+  const [user, setUser] = useState<any>();
 
   const [selectedButtons, setSelectedButtons] = useState([
     true,
@@ -42,6 +43,10 @@ export default function page() {
       );
       console.log("requestPurchase", requestPurchase);
       setItems(requestPurchase);
+
+      const userInfo = await getUserInfo(clothingSalesId);
+      console.log("userinfo", userInfo);
+      setUser(userInfo.result);
     };
     fetchItem();
   }, []);
@@ -53,18 +58,20 @@ export default function page() {
         <div className="mt-24pxr">
           <div className="flex font-14pxr font-medium leading-22pxr">
             <div className="text-unSelected-color">이름</div>
-            <div className="text-nav-color ml-8pxr mr-36pxr">이도현</div>
+            <div className="text-nav-color ml-8pxr mr-36pxr">{user?.name}</div>
 
             <div className="text-unSelected-color">코드</div>
-            <div className="text-nav-color ml-8pxr mr-36pxr">161-1</div>
+            <div className="text-nav-color ml-8pxr mr-36pxr">{user?.code}</div>
 
             <div className="text-unSelected-color">주소</div>
             <div className="text-nav-color ml-8pxr mr-36pxr">
-              서울특별시 마포구 와우산로 94
+              {user?.address}
             </div>
 
             <div className="text-unSelected-color">번호</div>
-            <div className="text-nav-color ml-8pxr mr-36pxr">010-8190-9773</div>
+            <div className="text-nav-color ml-8pxr mr-36pxr">
+              {user?.phoneNumber}
+            </div>
           </div>
         </div>
 
