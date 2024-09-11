@@ -1,6 +1,21 @@
+import { updateClothingSalesStatus } from "@/api/request";
 import React from "react";
+import { useState, useEffect } from "react";
 
-export default function UserDropdown() {
+export default function UserDropdown({ item, setItems }: any) {
+  const handleSave = async (state: string) => {
+    try {
+      await updateClothingSalesStatus(item.id, state);
+      setItems((prevItems: any) =>
+        prevItems.map((it: any) =>
+          it.id === item.id ? { ...it, status: state } : it
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update tracking number:", error);
+    }
+  };
+
   const stateList = [
     "리픽백 배송",
     "수거 중",
@@ -17,9 +32,12 @@ export default function UserDropdown() {
   return (
     <div>
       <div className="absolute" onClick={(e) => e.stopPropagation()}>
-        <div className="text-12pxr text-nav-btn font-medium leading-19pxr w-148pxr h-402pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white mt-14pxr">
+        <div className="relative text-12pxr text-nav-btn font-medium leading-19pxr w-148pxr h-402pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white mt-14pxr">
           {stateList.map((state) => (
-            <li className="w-148pxr h-36pxr hover:bg-circle-gray pt-8pxr pl-17pxr pb-8pxr">
+            <li
+              className="w-148pxr h-36pxr hover:bg-circle-gray pt-8pxr pl-17pxr pb-8pxr"
+              onClick={() => handleSave(state)}
+            >
               {state}
             </li>
           ))}
