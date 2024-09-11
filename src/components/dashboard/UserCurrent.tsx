@@ -53,7 +53,7 @@ export default function UserCurrent() {
           </div>
         </div>
 
-        <div className="rounded-10pxr bg-background-color w-402pxr h-220pxr mt-16pxr">
+        {/* <div className="rounded-10pxr bg-background-color w-402pxr h-220pxr mt-16pxr">
           <div className="pl-27pxr pt-24pxr">
             <div className="text-16pxr font-medium leading-24pxr text-text-sub">
               유저 성별
@@ -80,7 +80,7 @@ export default function UserCurrent() {
               </PieChart>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
