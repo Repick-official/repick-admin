@@ -15,7 +15,8 @@ export default function page() {
   const path = usePathname().split("/");
 
   const clothingSalesId = Number(path[3]);
-  const clothingSalesCount = Number(path[4]);
+  //const clothingSalesCount = Number(path[4]);
+  const [state, setState] = useState<string>("selling");
 
   const [items, setItems] = useState<any>(null);
   const [user, setUser] = useState<any>();
@@ -28,16 +29,37 @@ export default function page() {
     false,
   ]);
 
-  const handleButtonClick = (index: any) => {
+  const handleButtonClick = (index: number) => {
     const updatedButtons = selectedButtons.map((_, i) => i === index);
     setSelectedButtons(updatedButtons);
+
+    // 버튼 인덱스에 따라 상태값을 변경
+    switch (index) {
+      case 0:
+        setState("selling");
+        break;
+      case 1:
+        setState("sold-out");
+        break;
+      case 2:
+        setState("rejected");
+        break;
+      case 3:
+        setState("selling-end");
+        break;
+      case 4:
+        setState("kg-sell");
+        break;
+      default:
+        setState("selling");
+    }
   };
 
   useEffect(() => {
     const fetchItem = async () => {
       const requestPurchase = await getClothingSalesDetails(
         clothingSalesId,
-        "selling",
+        state,
         "0",
         "4"
       );
@@ -49,7 +71,7 @@ export default function page() {
       setUser(userInfo.result);
     };
     fetchItem();
-  }, []);
+  }, [state]);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -121,17 +143,16 @@ export default function page() {
                 </div>
               ))}
             </div>
-            <SellingOrSold clothing={items} />
+            {/* <SellingOrSold clothing={items} /> */}
+            <div className="mt-24pxr">
+              {selectedButtons[0] && <SellingOrSold clothing={items} />}
+              {selectedButtons[1] && <SellingOrSold clothing={items} />}
+              {/* {selectedButtons[2] && <RejectedProduct rejectedItems={rejectedItems} />}
+              {selectedButtons[3] && <ExpiredProduct expiredItems={expiredItems} />}
+              {selectedButtons[4] && <div>KG 매입 관련 컴포넌트는 아직 없습니다.</div>} */}
+            </div>
           </div>
         }
-
-        {/* <div className="mt-24pxr">
-              {selectedButtons[0] && <RequestPurchase orders={orders} />}
-              {selectedButtons[1] && <RequestPurchase orders={ordersCompleted} />}
-              {selectedButtons[2] && <RejectedProduct rejectedItems={rejectedItems} />}
-              {selectedButtons[3] && <ExpiredProduct expiredItems={expiredItems} />}
-              {selectedButtons[4] && <div>KG 매입 관련 컴포넌트는 아직 없습니다.</div>}
-            </div> */}
       </div>
     </div>
   );

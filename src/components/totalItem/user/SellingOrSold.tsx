@@ -7,8 +7,15 @@ import {
 
 export default function SellingOrSold(clothing: any) {
   const [view, setView] = useState<{ [key: number]: boolean }>({});
+  console.log(clothing.clothing.result.content);
+  console.log(clothing);
 
-  const [userItems, setUserItems] = useState<any>(clothing.result?.content);
+  const [userItems, setUserItems] = useState<any[]>();
+
+  useEffect(() => {
+    setUserItems(clothing.clothing?.result.content);
+  }, []);
+
   console.log("useritems", userItems);
 
   const handleClickOutside = (event: any) => {
@@ -40,7 +47,9 @@ export default function SellingOrSold(clothing: any) {
     <div className="w-1216pxr h-1038pxr  border-1pxr border-solid border-dark-gray bg-white ml-32pxr">
       <div className="mt-28pxr ml-40pxr w-1144pxr">
         <div className="flex">
-          <div className="text-16pxr font-medium leading-24pxr">전체 {}개</div>
+          <div className="text-16pxr font-medium leading-24pxr">
+            전체 {clothing.clothing.result.totalElements}개
+          </div>
         </div>
         <div className="bg-circle-gray h-48pxr flex mt-24pxr">
           <div className="text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
