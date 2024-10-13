@@ -5,16 +5,17 @@ import {
   RequestReturnProps,
 } from "@/interface/interface";
 
-export default function SellingOrSold(clothing: any) {
+export default function SellingOrSold(items: any) {
   const [view, setView] = useState<{ [key: number]: boolean }>({});
-  console.log(clothing.clothing.result.content);
-  console.log(clothing);
 
   const [userItems, setUserItems] = useState<any[]>();
 
   useEffect(() => {
-    setUserItems(clothing.clothing?.result.content);
-  }, []);
+    // items.clothing.result.content가 존재할 때만 setUserItems 호출
+    if (items?.clothing?.result?.content) {
+      setUserItems(items.clothing.result.content);
+    }
+  }, [items]);
 
   console.log("useritems", userItems);
 
@@ -24,8 +25,6 @@ export default function SellingOrSold(clothing: any) {
       !event.target.closest(".dropdown-container")
     ) {
       setView({});
-      {
-      }
     }
   };
 
@@ -48,7 +47,7 @@ export default function SellingOrSold(clothing: any) {
       <div className="mt-28pxr ml-40pxr w-1144pxr">
         <div className="flex">
           <div className="text-16pxr font-medium leading-24pxr">
-            전체 {clothing.clothing.result.totalElements}개
+            전체 {items?.clothing?.result?.totalElements ?? 0}개
           </div>
         </div>
         <div className="bg-circle-gray h-48pxr flex mt-24pxr">
