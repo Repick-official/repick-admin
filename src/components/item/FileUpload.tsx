@@ -4,41 +4,45 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 export default function FileUpload() {
-	const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-
 	const onDrop = useCallback(async (acceptedFiles: File[]) => {
-		acceptedFiles.forEach(async (file) => {
-			// Presigned URL 가져오기
-			const fileType = file.type === 'image/png' ? 'IMAGE' : 'EXCEL';
-			const presignedUrlData = await getPresignedUrl(file.name, fileType);
+		const successfullyUploadedFiles: string[] = [];
 
-			if (presignedUrlData?.result?.url) {
-				try {
-					// Presigned URL로 PUT 요청
-					const response = await fetch(presignedUrlData.result.url, {
-						method: 'PUT',
-						body: file,
-						headers: {
-							'Content-Type': file.type,
-						},
-					});
+		await Promise.all(
+			acceptedFiles.map(async (file) => {
+				// Presigned URL 가져오기
+				const fileType = file.type === 'image/png' ? 'IMAGE' : 'EXCEL';
+				const presignedUrlData = await getPresignedUrl(file.name, fileType);
 
-					if (response.ok) {
-						console.log(`File uploaded successfully: ${file.name}`);
+				if (presignedUrlData?.result?.url) {
+					try {
+						// Presigned URL로 PUT 요청
+						const response = await fetch(presignedUrlData.result.url, {
+							method: 'PUT',
+							body: file,
+							headers: {
+								'Content-Type': file.type,
+							},
+						});
 
-						// S3에 저장된 이미지 파일 URL 생성 (이미지로 바로 표시할 수 있도록)
-						const imageUrl = presignedUrlData.result.url.split('?')[0];
+						if (response.ok) {
+							console.log(`File uploaded successfully: ${file.name}`);
 
-						// 업로드된 파일 목록에 이미지 URL 추가
-						setUploadedFiles((prev) => [...prev, imageUrl]);
-					} else {
-						console.error(`Failed to upload file: ${file.name}`);
+							// S3에 저장된 파일 URL 생성
+							const imageUrl = presignedUrlData.result.url.split('?')[0];
+
+							// 성공한 파일 URL 저장
+							successfullyUploadedFiles.push(imageUrl);
+						} else {
+							console.error(`Failed to upload file: ${file.name}`);
+						}
+					} catch (error) {
+						console.error('Error uploading file:', error);
 					}
-				} catch (error) {
-					console.error('Error uploading file:', error);
 				}
-			}
-		});
+			})
+		);
+
+		alert(`이미지 ${successfullyUploadedFiles.length}개가 업로드되었습니다.`);
 	}, []);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -55,19 +59,7 @@ export default function FileUpload() {
 			className="w-390pxr h-104pxr bg-circle-gray rounded-10pxr border-dashed border-2 border-gray-300 p-4"
 		>
 			<input {...getInputProps()} />
-			{uploadedFiles.length > 0 ? (
-				<div className="flex gap-2">
-					{uploadedFiles.map((file, index) => (
-						<div key={index} className="w-24 h-24">
-							<img
-								src={file}
-								alt={`Uploaded ${file}`}
-								className="w-full h-full object-cover rounded"
-							/>
-						</div>
-					))}
-				</div>
-			) : isDragActive ? (
+			{isDragActive ? (
 				<p>파일을 여기에 놓으세요...</p>
 			) : (
 				<div className="flex">

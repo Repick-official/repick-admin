@@ -1,42 +1,39 @@
 'use client';
 import { getPresignedUrl } from '@/api/request';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 export default function ExcelUpload() {
-	const [uploadedExcelFiles, setUploadedExcelFiles] = useState<string[]>([]);
-
 	// 엑셀 파일을 드래그 앤 드롭하여 업로드하는 함수
 	const onExcelDrop = useCallback(async (acceptedFiles: File[]) => {
-		acceptedFiles.forEach(async (file) => {
-			// Presigned URL 가져오기
-			const presignedUrlData = await getPresignedUrl(file.name, 'EXCEL');
+		await Promise.all(
+			acceptedFiles.map(async (file) => {
+				// Presigned URL 가져오기
+				const presignedUrlData = await getPresignedUrl(file.name, 'EXCEL');
 
-			if (presignedUrlData?.result?.url) {
-				try {
-					// Presigned URL로 PUT 요청
-					const response = await fetch(presignedUrlData.result.url, {
-						method: 'PUT',
-						body: file,
-						headers: {
-							'Content-Type': file.type,
-						},
-					});
+				if (presignedUrlData?.result?.url) {
+					try {
+						// Presigned URL로 PUT 요청
+						const response = await fetch(presignedUrlData.result.url, {
+							method: 'PUT',
+							body: file,
+							headers: {
+								'Content-Type': file.type,
+							},
+						});
 
-					if (response.ok) {
-						console.log(`Excel file uploaded successfully: ${file.name}`);
-
-						// 엑셀 파일 URL 추가
-						const excelUrl = presignedUrlData.result.url.split('?')[0];
-						setUploadedExcelFiles((prev) => [...prev, excelUrl]);
-					} else {
-						console.error(`Failed to upload Excel file: ${file.name}`);
+						if (response.ok) {
+							console.log(`Excel file uploaded successfully: ${file.name}`);
+							alert('엑셀 파일이 업로드되었습니다');
+						} else {
+							console.error(`Failed to upload Excel file: ${file.name}`);
+						}
+					} catch (error) {
+						console.error('Error uploading Excel file:', error);
 					}
-				} catch (error) {
-					console.error('Error uploading Excel file:', error);
 				}
-			}
-		});
+			})
+		);
 	}, []);
 
 	// 엑셀 파일 드롭존 설정
@@ -58,15 +55,7 @@ export default function ExcelUpload() {
 			className="w-390pxr h-104pxr bg-circle-gray rounded-10pxr border-dashed border-2 border-gray-300 p-4"
 		>
 			<input {...getExcelInputProps()} />
-			{uploadedExcelFiles.length > 0 ? (
-				<div className="flex flex-col">
-					{uploadedExcelFiles.map((file, index) => (
-						<div key={index} className="text-gray-700">
-							엑셀 파일: {file.split('/').pop()}
-						</div>
-					))}
-				</div>
-			) : isExcelDragActive ? (
+			{isExcelDragActive ? (
 				<p>엑셀 파일을 여기에 놓으세요...</p>
 			) : (
 				<div className="flex">
