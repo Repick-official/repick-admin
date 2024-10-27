@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { ClothingSalesItemStatus } from '@/interface/interface';
 
-export default function SellingOrSold({ items }: any) {
+export default function KGProduct({ items }: any) {
 	const [view, setView] = useState<{ [key: string]: boolean }>({});
 	const [userItems, setUserItems] = useState<any[]>([]);
 
@@ -48,11 +48,9 @@ export default function SellingOrSold({ items }: any) {
 						<div className="ml-15pxr w-91pxr">상품 코드</div>
 						<div className="w-239pxr">상품명</div>
 						<div className="w-69pxr">등급</div>
-						<div className="w-149pxr">판매기간</div>
-						<div className="w-127pxr">판매금액</div>
-						<div className="w-125pxr">정산금</div>
-						<div className="w-142pxr">수수료</div>
-						<div>상태</div>
+						<div className="w-149pxr">신청일</div>
+						<div className="w-127pxr">경로</div>
+						<div className="w-125pxr">정산상태</div>
 					</div>
 				</div>
 
@@ -68,45 +66,6 @@ export default function SellingOrSold({ items }: any) {
 							<div className="w-149pxr">{item.salesPeriod}</div>
 							<div className="w-127pxr">{item.salesPrice}</div>
 							<div className="w-125pxr">{item.settlementPrice}</div>
-							<div className="w-142pxr">{item.fee}</div>
-
-							<ul
-								className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-								onClick={() => toggleDropdown(item.productCode)}
-							>
-								<div className="flex items-center px-8pxr py-8pxr">
-									<div>{item.isReturned ? '반품' : '판매 중'}</div>
-									<div className="ml-auto">
-										{view[item.productCode] ? (
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="20"
-												height="20"
-												viewBox="0 0 20 20"
-												fill="none"
-											>
-												<path
-													d="M5.59056 13.0889C5.26512 13.4144 4.73748 13.4144 4.41205 13.0889C4.08661 12.7635 4.08661 12.2359 4.41205 11.9104L9.41205 6.91042C9.73748 6.58498 10.2651 6.58498 10.5906 6.91042L15.5906 11.9104C15.916 12.2359 15.916 12.7635 15.5906 13.0889C15.2651 13.4144 14.7375 13.4144 14.412 13.0889L10.0013 8.67819L5.59056 13.0889Z"
-													fill="#1D2939"
-												/>
-											</svg>
-										) : (
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="20"
-												height="20"
-												viewBox="0 0 20 20"
-												fill="none"
-											>
-												<path
-													d="M5.59056 6.91107C5.26512 6.58563 4.73748 6.58563 4.41205 6.91107C4.08661 7.23651 4.08661 7.76414 4.41205 8.08958L9.41205 13.0896C9.73748 13.415 10.2651 13.415 10.5906 13.0896L15.5906 8.08958C15.916 7.76414 15.916 7.23651 15.5906 6.91107C15.2651 6.58563 14.7375 6.58563 14.412 6.91107L10.0013 11.3218L5.59056 6.91107Z"
-													fill="#1D2939"
-												/>
-											</svg>
-										)}
-									</div>
-								</div>
-							</ul>
 						</div>
 						<div className="h-1pxr w-full bg-dark-gray"></div>
 					</div>

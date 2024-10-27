@@ -17,6 +17,7 @@ function Purchase() {
 		const fetchItem = async () => {
 			const requestPurchase = await getRequestPurchase('0', '4');
 			const requestReturn = await getRequestReturn('0', '4');
+
 			setOrders(requestPurchase);
 			setReturns(requestReturn);
 		};

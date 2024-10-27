@@ -49,7 +49,10 @@ export default function UserList({ users }: any) {
 							{item.isBoxCollect ? '박스' : '리픽백'}
 						</div>
 
-						<ul onClick={() => toggleDropdown(item.id)}>
+						<ul
+							onClick={() => toggleDropdown(item.id)}
+							className="cursor-pointer"
+						>
 							<div className="w-133pxr mr-32pxr flex">
 								{item.status}
 								{view[item.id] ? (

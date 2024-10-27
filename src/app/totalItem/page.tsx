@@ -11,7 +11,7 @@ function Totalitem() {
 
 	useEffect(() => {
 		const fetchItem = async () => {
-			const requestPurchase = await getClothingSales(1, '0', '4');
+			const requestPurchase = await getClothingSales('0', '10');
 			setClothing(requestPurchase);
 
 			console.log('requestPurchase', requestPurchase);

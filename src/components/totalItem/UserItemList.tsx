@@ -26,9 +26,7 @@ export default function UserItemList({ clothing }: any) {
 								<div
 									className="flex items-center cursor-pointer"
 									onClick={() =>
-										router.push(
-											`/totalItem/userItem/${item.clothingSalesId}/${item.clothingSalesCount}`
-										)
+										router.push(`/totalItem/userItem/${item.clothingSalesId}`)
 									}
 								>
 									상세보기

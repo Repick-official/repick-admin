@@ -11,10 +11,6 @@ function item() {
 			<div className="mt-48pxr">
 				<div className="w-454pxr h-432pxr bg-white rounded-10pxr border-dark-gray border-1pxr border-solid">
 					<div className="mt-22pxr ml-29pxr">
-						<div className="text-24pxr text-nav-color font-medium leading-36pxr">
-							{'17(이도현)'}
-						</div>
-
 						<div className="mt-40pxr">
 							<div>
 								<div className="text-16pxr text-nav-color font-medium leading-24pxr mb-12pxr">

@@ -6,10 +6,13 @@ import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-// import SellingOrSold from "@/components/totalItem/\buser/SellingOrSold";
 import { ClothingSalesItemStatus } from '@/interface/interface';
 import { it } from 'node:test';
 import item from '@/app/item/page';
+import SellingOrSold from '@/components/totalItem/user/SellingOrSold';
+import RejectedProduct from '@/components/totalItem/user/RejectedProduct';
+import ExpiredProduct from '@/components/totalItem/user/ExpiredProduct';
+import KGProduct from '@/components/totalItem/user/KGProduct';
 
 export default function Page() {
 	const path = usePathname().split('/');
@@ -65,7 +68,7 @@ export default function Page() {
 
 	// 여러 상태의 API 호출을 병렬로 처리하고, 모두 완료된 후 상태 업데이트
 	const fetchTotalElementsForAllStates = async () => {
-		console.log('fetchTotalElementsForAllStates called'); // 함수 호출 여부 확인
+		console.log('fetchTotalElementsForAllStates called');
 		const states = [
 			'selling',
 			'sold-out',
@@ -202,11 +205,11 @@ export default function Page() {
 						</div>
 						{/* <SellingOrSold clothing={items} /> */}
 						<div className="mt-24pxr">
-							{/* {selectedButtons[0] && <SellingOrSold clothing={items} />}
-              {selectedButtons[1] && <SellingOrSold clothing={items} />} */}
-							{/* {selectedButtons[2] && <RejectedProduct rejectedItems={rejectedItems} />}
-              {selectedButtons[3] && <ExpiredProduct expiredItems={expiredItems} />}
-              {selectedButtons[4] && <div>KG 매입 관련 컴포넌트는 아직 없습니다.</div>} */}
+							{selectedButtons[0] && <SellingOrSold clothing={items} />}
+							{selectedButtons[1] && <SellingOrSold clothing={items} />}
+							{selectedButtons[2] && <RejectedProduct rejectedItems={items} />}
+							{selectedButtons[3] && <ExpiredProduct expiredItems={items} />}
+							{selectedButtons[4] && <KGProduct items={items} />}
 						</div>
 					</div>
 				}

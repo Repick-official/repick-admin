@@ -26,8 +26,9 @@ export default function RequestPurchase({ orders }: RequestPurchaseProps) {
 						<div className="w-255pxr">상품명</div>
 						<div className="w-113pxr">이름</div>
 						<div className="w-291pxr">주소</div>
-						<div className="w-154pxr">전화번호</div>
-						<div>상태</div>
+						<div className="w-110pxr">전화번호</div>
+						<div className="w-154pxr">상태</div>
+						<div>반품</div>
 					</div>
 				</div>
 

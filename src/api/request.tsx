@@ -96,21 +96,25 @@ export const updateOrderState = async (
 };
 
 export const getClothingSales = async (
-	userId: number,
 	page: string,
-	size: string
+	size: string,
+	userId?: number
 ) => {
 	try {
-		const response = await fetch(
-			process.env.API_URL +
-				`/product/count?userId=${userId}&page=${page}&size=${size}`,
-			{
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		);
+		const url = new URL(process.env.API_URL + '/product/count');
+		if (userId !== undefined) {
+			url.searchParams.append('userId', userId.toString());
+		}
+		url.searchParams.append('page', page);
+		url.searchParams.append('size', size);
+
+		const response = await fetch(url.toString(), {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
 		if (response.ok) {
 			const data = await response.json();
 			return data;
