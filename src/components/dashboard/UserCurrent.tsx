@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 export default function UserCurrent({ users }: any) {
+  const totalUserCount =
+    users?.result?.femaleUserRatio + users?.result?.maleUserRatio;
+
+  const femaleRatio = (users?.result?.femaleUserRatio / totalUserCount) * 100;
+  const maleRatio = (users?.result?.maleUserRatio / totalUserCount) * 100;
+
   const data = [
-    { name: "여자", value: 64 },
-    { name: "남자", value: 36 },
+    { name: "여자", value: femaleRatio },
+    { name: "남자", value: maleRatio },
   ];
 
   const COLORS = ["#F76056", "#439AFF"];
-
-  const [usersData, setUsersData] = useState(users);
 
   return (
     <div className="w-466pxr h-504pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white ml-19pxr">
@@ -22,7 +26,7 @@ export default function UserCurrent({ users }: any) {
             </div>
             <div className="flex">
               <div className="text-48pxr font-bold leading-72pxr text-nav-btn">
-                {usersData.result.totalUserCount}
+                {users?.result?.totalUserCount}
               </div>
               <div className="text-20pxr font-medium leading-30pxr text-text-gray ml-8pxr mt-27pxr">
                 명
@@ -46,7 +50,7 @@ export default function UserCurrent({ users }: any) {
                 />
               </svg>
               <div className="text-14pxr font-medium leading-21pxr text-text-green">
-                {usersData.result.newUserCount}명 신규 가입
+                {users?.result?.newUserCount}명 신규 가입
               </div>
               <div className="text-12pxr font-medium leading-18pxr text-unSelected-color">
                 최근 1개월 기준
@@ -55,10 +59,40 @@ export default function UserCurrent({ users }: any) {
           </div>
         </div>
 
-        {/* <div className="rounded-10pxr bg-background-color w-402pxr h-220pxr mt-16pxr">
-          <div className="pl-27pxr pt-24pxr">
-            <div className="text-16pxr font-medium leading-24pxr text-text-sub">
-              유저 성별
+        <div className="rounded-10pxr bg-background-color w-402pxr h-220pxr mt-16pxr">
+          <div className="pl-27pxr pt-24pxr flex">
+            <div className="mr-69pxr">
+              <div className="text-16pxr font-medium leading-24pxr text-text-sub">
+                유저 성별
+              </div>
+              <div className="text-18pxr font-medium leading-27pxr text-text-sub mt-20pxr">
+                <div className="flex items-center mb-8pxr">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="19"
+                    viewBox="0 0 18 19"
+                    fill="none"
+                  >
+                    <circle cx="9" cy="9.5" r="9" fill="#F76056" />
+                  </svg>
+                  <div className="font-bold mx-12pxr">{femaleRatio}%</div>
+                  여성
+                </div>
+                <div className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="19"
+                    viewBox="0 0 18 19"
+                    fill="none"
+                  >
+                    <circle cx="9" cy="9.5" r="9" fill="#439AFF" />
+                  </svg>
+                  <div className="font-bold mx-12pxr">{maleRatio}%</div>
+                  남성
+                </div>
+              </div>
             </div>
             <div>
               <PieChart width={168} height={168}>
@@ -82,7 +116,7 @@ export default function UserCurrent({ users }: any) {
               </PieChart>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
