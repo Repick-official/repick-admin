@@ -9,25 +9,30 @@ import {
   getDashboardClothing,
   getDashboardOrder,
   getDashboardToday,
+  getUserStatistics,
 } from "@/api/request";
 
-function dashboard() {
+function Dashboard() {
   const [todayState, setTodayState] = useState<any>(null);
   const [clothingState, setClothingState] = useState<any>(null);
   const [orderState, setOrderState] = useState<any>(null);
+  const [users, setUsers] = useState<any>(null);
 
   useEffect(() => {
     const fetchItem = async () => {
       const today = await getDashboardToday();
       const clothing = await getDashboardClothing();
       const order = await getDashboardOrder();
+      const userData = await getUserStatistics();
       setTodayState(today);
       setClothingState(clothing);
       setOrderState(order);
+      setUsers(userData);
     };
     fetchItem();
   }, []);
   console.log("order", orderState);
+  console.log("userData", users);
 
   return (
     <div className="mt-69pxr ml-104pxr">
@@ -63,10 +68,10 @@ function dashboard() {
           />
         </div>
         <div>
-          <UserCurrent />
+          <UserCurrent users={users} />
         </div>
       </div>
     </div>
   );
 }
-export default dashboard;
+export default Dashboard;

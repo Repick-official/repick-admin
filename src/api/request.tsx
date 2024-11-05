@@ -96,21 +96,25 @@ export const updateOrderState = async (
 };
 
 export const getClothingSales = async (
-  userId: number,
   page: string,
-  size: string
+  size: string,
+  userId?: number
 ) => {
   try {
-    const response = await fetch(
-      process.env.API_URL +
-        `/product/count?userId=${userId}&page=${page}&size=${size}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const url = new URL(process.env.API_URL + "/product/count");
+    if (userId !== undefined) {
+      url.searchParams.append("userId", userId.toString());
+    }
+    url.searchParams.append("page", page);
+    url.searchParams.append("size", size);
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -273,6 +277,48 @@ export const getDashboardOrder = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const getPresignedUrl = async (filename: string, fileType: string) => {
+  console.log(process.env.API_TOKEN);
+  try {
+    const response = await fetch(
+      process.env.API_URL +
+        `/admin/presignedUrl?filename=${filename}&fileType=${fileType}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const getUserStatistics = async () => {
+  try {
+    const response = await fetch(process.env.API_URL + `/user/statistics`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
     });
     if (response.ok) {
