@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
-export default function UserCurrent() {
+export default function UserCurrent({ users }: any) {
   const data = [
     { name: "여자", value: 64 },
     { name: "남자", value: 36 },
   ];
 
   const COLORS = ["#F76056", "#439AFF"];
+
+  const [usersData, setUsersData] = useState(users);
 
   return (
     <div className="w-466pxr h-504pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white ml-19pxr">
@@ -20,14 +22,14 @@ export default function UserCurrent() {
             </div>
             <div className="flex">
               <div className="text-48pxr font-bold leading-72pxr text-nav-btn">
-                1,692
+                {usersData.result.totalUserCount}
               </div>
               <div className="text-20pxr font-medium leading-30pxr text-text-gray ml-8pxr mt-27pxr">
                 명
               </div>
             </div>
 
-            <div className="flex items-center h-24pxr">
+            <div className="flex items-center h-24pxr space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -44,9 +46,9 @@ export default function UserCurrent() {
                 />
               </svg>
               <div className="text-14pxr font-medium leading-21pxr text-text-green">
-                123명 신규 가입
+                {usersData.result.newUserCount}명 신규 가입
               </div>
-              <div className="text-12pxr font-medium leading-18pxr text-unSelected-color mt-10pxr ml-8pxr mb-2pxr">
+              <div className="text-12pxr font-medium leading-18pxr text-unSelected-color">
                 최근 1개월 기준
               </div>
             </div>
