@@ -1,21 +1,28 @@
 "use client";
-import { updateOrderState } from "@/api/request";
+import { updateOrderState, getRequestReturn } from "@/api/request";
 import { useState, useEffect } from "react";
 
-export default function ReturnDropdown({ item, setItems }: any) {
+export default function ReturnDropdown({ item, setItems, page, size }: any) {
   const [currentState, setCurrentState] = useState(item.state);
 
   const handleStateChange = async (newState: string) => {
     try {
+      // await updateOrderState(item.productOrderId, newState);
+      // setCurrentState(newState);
+      // setItems((prevItems: any) =>
+      //   prevItems.map((it: any) =>
+      //     it.productOrderId === item.productOrderId
+      //       ? { ...it, state: newState }
+      //       : it
+      //   )
+      // );
+      // 상태 업데이트 요청
       await updateOrderState(item.productOrderId, newState);
       setCurrentState(newState);
-      setItems((prevItems: any) =>
-        prevItems.map((it: any) =>
-          it.productOrderId === item.productOrderId
-            ? { ...it, state: newState }
-            : it
-        )
-      );
+
+      // API 호출을 통해 최신 데이터 가져오기
+      const updatedReturns = await getRequestReturn(String(page), String(size));
+      setItems(updatedReturns.result.content);
     } catch (error) {
       console.error("error", error);
     }
