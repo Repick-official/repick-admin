@@ -32,7 +32,7 @@ function Wardrobe() {
         <MainTitle mainTitleName="옷장 정리 현황" />
         <div>
           <TopInfo total={users?.result.totalElements} />
-          <WardrobeContent users={users} />
+          <WardrobeContent users={users} page={page} size={size} />
 
           {/* 페이지네이션 버튼 */}
           <div className="pagination mt-16pxr flex justify-center space-x-2">
