@@ -63,10 +63,13 @@ export default function ModModal({ onClose, item, setItems }: any) {
 
           <div className="flex mt-32pxr">
             <div className="flex ml-auto">
-              <div className="mr-28pxr" onClick={onClose}>
+              <div className="mr-28pxr cursor-pointer" onClick={onClose}>
                 <DelOrModBtn content="취소하기" />
               </div>
-              <div onClick={() => handleSave(trackingNumber)}>
+              <div
+                className="cursor-pointer"
+                onClick={() => handleSave(trackingNumber)}
+              >
                 <DelOrModBtn content="저장하기" />
               </div>
             </div>

@@ -2,6 +2,7 @@
 import PurchaseDropdown from "../requestPurchase/PurchaseItem";
 import { useState, useEffect } from "react";
 import ReturnDropdown from "./ReturnDropdown";
+import { getRequestReturn } from "@/api/request";
 import {
   RequestPurchaseProps,
   RequestReturnProps,
@@ -13,6 +14,21 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
 
   const [page, setPage] = useState(0); // 현재 페이지 상태
   const size = 10; // 페이지당 아이템 수
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
+
+  // 데이터 가져오기 함수
+  const fetchItems = async () => {
+    const updatedReturns = await getRequestReturn(String(page), String(size));
+    setItems(updatedReturns.result.content);
+  };
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
+  useEffect(() => {
+    fetchItems();
+  }, [page, reloadTrigger]);
+  // 상태 변경 후 부모 컴포넌트의 리로드 트리거를 업데이트
+  const handleStateChange = () => {
+    setReloadTrigger((prev) => !prev); // 트리거 토글
+  };
 
   const handleClickOutside = (event: any) => {
     if (
@@ -126,6 +142,7 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
                     setItems={setItems}
                     page={page}
                     size={size}
+                    onStateChange={fetchItems} // 콜백 함수 전달
                   />
                 )}
               </ul>
