@@ -2,6 +2,7 @@
 import PurchaseDropdown from "../requestPurchase/PurchaseItem";
 import { useState, useEffect } from "react";
 import ReturnDropdown from "./ReturnDropdown";
+import { getRequestReturn } from "@/api/request";
 import {
   RequestPurchaseProps,
   RequestReturnProps,
@@ -10,6 +11,24 @@ import {
 export default function RequestReturn({ returns }: RequestReturnProps) {
   const [view, setView] = useState<{ [key: number]: boolean }>({});
   const [items, setItems] = useState(returns?.result.content);
+
+  const [page, setPage] = useState(0); // 현재 페이지 상태
+  const size = 10; // 페이지당 아이템 수
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
+
+  // 데이터 가져오기 함수
+  const fetchItems = async () => {
+    const updatedReturns = await getRequestReturn(String(page), String(size));
+    setItems(updatedReturns.result.content);
+  };
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
+  useEffect(() => {
+    fetchItems();
+  }, [page, reloadTrigger]);
+  // 상태 변경 후 부모 컴포넌트의 리로드 트리거를 업데이트
+  const handleStateChange = () => {
+    setReloadTrigger((prev) => !prev); // 트리거 토글
+  };
 
   const handleClickOutside = (event: any) => {
     if (
@@ -41,6 +60,13 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
       setItems(returns.result.content);
     }
   }, [returns]);
+
+  // 페이지 변경 함수
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 0 && (!returns || newPage < returns.result.totalPages)) {
+      setPage(newPage);
+    }
+  };
 
   return (
     <div className="w-1216pxr h-1038pxr rounded-10pxr border-1pxr border-solid border-dark-gray bg-white ml-32pxr">
@@ -111,35 +137,49 @@ export default function RequestReturn({ returns }: RequestReturnProps) {
                   </div>
                 </div>
                 {view[item.productOrderId] && (
-                  <ReturnDropdown item={item} setItems={setItems} />
+                  <ReturnDropdown
+                    item={item}
+                    setItems={setItems}
+                    page={page}
+                    size={size}
+                    onStateChange={fetchItems} // 콜백 함수 전달
+                  />
                 )}
               </ul>
-              {/* <div className="flex ml-auto mr-26pxr">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M5 10C3.89543 10 3 10.8954 3 12C3 13.1046 3.89543 14 5 14C6.10457 14 7 13.1046 7 12C7 10.8954 6.10457 10 5 10Z"
-                    fill="#727B88"
-                  />
-                  <path
-                    d="M10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12Z"
-                    fill="#727B88"
-                  />
-                  <path
-                    d="M17 12C17 10.8954 17.8954 10 19 10C20.1046 10 21 10.8954 21 12C21 13.1046 20.1046 14 19 14C17.8954 14 17 13.1046 17 12Z"
-                    fill="#727B88"
-                  />
-                </svg>
-              </div> */}
             </div>
             <div className="h-1pxr w-full bg-dark-gray"></div>
           </div>
         ))}
+        {/* 페이지네이션 버튼 */}
+        <div className="pagination mt-16pxr flex justify-center space-x-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 border rounded"
+          >
+            이전
+          </button>
+
+          {[...Array(returns?.result.totalPages || 1)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-3 py-1 border rounded ${
+                index === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={!returns || page + 1 >= (returns.result.totalPages || 0)}
+            className="px-4 py-2 border rounded"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );
