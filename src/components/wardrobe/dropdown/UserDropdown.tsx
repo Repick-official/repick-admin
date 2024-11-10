@@ -5,14 +5,30 @@ import {
 import React from "react";
 import { useState, useEffect } from "react";
 
-export default function UserDropdown({ item, setItems, page, size }: any) {
+export default function UserDropdown({
+  item,
+  setItems,
+  page,
+  size,
+  sortType,
+}: any) {
+  const [localSortType, setLocalSortType] = useState(sortType); // 로컬 상태로 유지
+
+  useEffect(() => {
+    setLocalSortType(sortType); // 상위 컴포넌트에서 전달된 sortType이 변경될 때 업데이트
+  }, [sortType]);
+
   const handleSave = async (state: string) => {
     try {
       // 상태 업데이트 요청
       await updateClothingSalesStatus(item.id, state);
 
       // API를 통해 최신 데이터 가져오기
-      const updatedUserList = await getClothingSalesStatus(page, size); // 페이지와 사이즈를 적절히 설정
+      const updatedUserList = await getClothingSalesStatus(
+        page,
+        size,
+        localSortType
+      ); // 페이지와 사이즈를 적절히 설정
       setItems(updatedUserList.result.content); // 최신 데이터로 설정
     } catch (error) {
       console.error("Failed to update tracking number:", error);

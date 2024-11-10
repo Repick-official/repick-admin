@@ -177,20 +177,30 @@ export const getUserInfo = async (clothingSalesId: number) => {
 };
 export const getClothingSalesStatus = async (
   page: string,
-  size: string
-  // startDate: string,
-  // endDate: string
+  size: string,
+  type: string = "latest", // 기본값으로 "latest" 설정
+  startDate?: string,
+  endDate?: string
 ) => {
   try {
-    const response = await fetch(
-      process.env.API_URL + `/clothing-sales/status?page=${page}&size=${size}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    // URL에 동적으로 파라미터 추가
+    let url = `${process.env.API_URL}/clothing-sales/status?page=${page}&size=${size}&type=${type}`;
+
+    if (startDate) {
+      url += `&startDate=${encodeURIComponent(startDate)}`;
+    }
+
+    if (endDate) {
+      url += `&endDate=${encodeURIComponent(endDate)}`;
+    }
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     if (response.ok) {
       const data = await response.json();
       return data;
