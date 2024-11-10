@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import DateDropdown from "./dropdown/DateDropdown";
 
 export default function TopInfo({ total, onDateFilter, onSortChange }: any) {
   const [selectedSort, setSelectedSort] = useState("최신순");
   const [isSortDropdownVisible, setIsSortDropdownVisible] = useState(false);
+  const [isDateVisible, setIsDateVisible] = useState(false);
 
   const handleSortSelection = (sort: string) => {
     setSelectedSort(sort);
@@ -20,7 +22,10 @@ export default function TopInfo({ total, onDateFilter, onSortChange }: any) {
         </div>
 
         <div className="flex items-center ml-auto">
-          <div className="w-208pxr h-36pxr rounded-8pxr border-1pxr border-solid border-box-color">
+          <div
+            className="w-208pxr h-36pxr rounded-8pxr border-1pxr border-solid border-box-color cursor-pointer"
+            onClick={() => setIsDateVisible(!isDateVisible)}
+          >
             <div className="ml-174pxr mt-8pxr">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +50,7 @@ export default function TopInfo({ total, onDateFilter, onSortChange }: any) {
 
           <div
             onClick={() => setIsSortDropdownVisible(!isSortDropdownVisible)}
-            className="rounded-5pxr border-1pxr border-solid border-dark-gray py-8pxr px-12pxr flex items-center ml-17pxr"
+            className="rounded-5pxr border-1pxr border-solid border-dark-gray py-8pxr px-12pxr flex items-center ml-17pxr cursor-pointer"
           >
             {selectedSort}
             <div className="ml-40pxr">
@@ -65,6 +70,11 @@ export default function TopInfo({ total, onDateFilter, onSortChange }: any) {
           </div>
         </div>
       </div>
+      {isDateVisible && (
+        <div className="absolute">
+          <DateDropdown onDateFilter={onDateFilter} />
+        </div>
+      )}
       {isSortDropdownVisible && (
         <div className="absoulte ml-1140pxr mt-16pxr">
           <div className="absolute w-152pxr h-76pxr rounded-10pxr text-13pxr border-1pxr border-solid bg-white font-medium">
