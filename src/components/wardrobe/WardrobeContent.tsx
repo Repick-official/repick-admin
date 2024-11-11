@@ -3,7 +3,13 @@ import { useState, useEffect } from "react";
 import UserList from "./UserList";
 import { getClothingSalesStatus } from "@/api/request";
 
-export default function WardrobeContent({ users }: any) {
+export default function WardrobeContent({
+  users,
+  page,
+  size,
+  sortType,
+  onUpdate,
+}: any) {
   return (
     <div>
       <div className="w-1262pxr h-54pxr bg-circle-gray mt-16pxr text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
@@ -22,7 +28,7 @@ export default function WardrobeContent({ users }: any) {
       </div>
 
       <div>
-        <UserList users={users} />
+        <UserList users={users} page={page} size={size} sortType={sortType} />
       </div>
     </div>
   );
