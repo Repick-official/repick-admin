@@ -342,3 +342,28 @@ export const getUserStatistics = async () => {
     throw error;
   }
 };
+export const updateProductReturn = async (
+  returnState: string,
+  productIds: number
+) => {
+  try {
+    const response = await fetch(process.env.API_URL + `/product/return`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        returnState: returnState,
+        productIds: [productIds],
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};

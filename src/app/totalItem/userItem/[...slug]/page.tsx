@@ -227,8 +227,18 @@ export default function Page() {
             <div className="mt-24pxr">
               {selectedButtons[0] && <SellingProduct clothing={items} />}
               {selectedButtons[1] && <SoldProduct clothing={items} />}
-              {selectedButtons[2] && <RejectedProduct rejectedItems={items} />}
-              {selectedButtons[3] && <ExpiredProduct expiredItems={items} />}
+              {selectedButtons[2] && (
+                <RejectedProduct
+                  rejectedItems={items}
+                  clothingSalesId={clothingSalesId}
+                />
+              )}
+              {selectedButtons[3] && (
+                <ExpiredProduct
+                  expiredItems={items}
+                  clothingSalesId={clothingSalesId}
+                />
+              )}
               {selectedButtons[4] && <KGProduct items={items} />}
             </div>
           </div>
