@@ -1,19 +1,40 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
-import { productReturn } from "@/api/request";
+import Image from "next/image";
+import { getClothingSalesDetails } from "@/api/request";
+import ReExDropdown from "../dropdown/ReExDropdown";
 
-export default function RejectedProduct({ rejectedItems, onStateChange }: any) {
+export default function RejectedProduct({
+  rejectedItems,
+  clothingSalesId,
+}: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
-  const [userItems, setUserItems] = useState<any[]>([]);
+  const [userItems, setUserItems] = useState<any>(
+    rejectedItems?.result?.content
+  );
+  //const [items, setItems] = useState(expiredItems.result.content);
 
+  const [page, setPage] = useState(0); // 현재 페이지 상태
+  const size = 10; // 페이지당 아이템 수
+
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
+
+  // 데이터 가져오기 함수
+  const fetchItems = async () => {
+    const updatedReturns = await getClothingSalesDetails(
+      clothingSalesId,
+      "rejected",
+      String(page),
+      String(size)
+    );
+    setUserItems(updatedReturns.result.content);
+  };
+
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
-    if (rejectedItems?.result?.content) {
-      setUserItems(rejectedItems?.result.content);
-    }
-  }, [rejectedItems]);
-
-  console.log("rejectedItems", rejectedItems);
+    fetchItems();
+  }, [page, reloadTrigger]);
 
   const handleClickOutside = (event: any) => {
     if (
@@ -27,24 +48,8 @@ export default function RejectedProduct({ rejectedItems, onStateChange }: any) {
   const toggleDropdown = (id: string) => {
     setView((prevView) => ({
       ...prevView,
-      [id]: !prevView[id],
+      [id]: !prevView[id], // 현재 아이템의 상태만 토글
     }));
-  };
-
-  // 상태 변경 함수
-  const handleStateChange = async (newState: string, productId: number) => {
-    try {
-      await productReturn(newState, productId);
-      setUserItems((prevItems) =>
-        prevItems.map((item) =>
-          item.productCode === productId ? { ...item, state: newState } : item
-        )
-      );
-      setView((prevView) => ({ ...prevView, [productId]: false })); // 드롭다운 닫기
-      if (onStateChange) onStateChange(); // 부모 컴포넌트 업데이트 요청
-    } catch (error) {
-      console.error("Error updating product state:", error);
-    }
   };
 
   useEffect(() => {
@@ -69,28 +74,41 @@ export default function RejectedProduct({ rejectedItems, onStateChange }: any) {
           <div className="text-14pxr font-medium leading-22pxr text-unSelected-color flex items-center">
             <div className="ml-15pxr w-91pxr">상품 코드</div>
             <div className="w-239pxr">상품명</div>
+            {/* <div className="w-100pxr">등급</div> */}
             <div className="w-100pxr">신청일</div>
             <div className="w-149pxr">상태</div>
           </div>
         </div>
 
-        {userItems?.map((item) => (
-          <div key={item.productCode}>
+        {userItems?.map((item: any) => (
+          <div key={item.index}>
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
               <div className="flex items-center w-239pxr">
-                <div className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray"></div>
+                <Image
+                  src={item.thumbnailImageUrl} // `decodeURI` 사용
+                  alt={item.productName}
+                  width={60}
+                  height={60}
+                  className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray object-cover rounded"
+                />
+                <div className="w-146pxr ml-12pxr">{item.productName}</div>
               </div>
+              {/* <div className="w-100pxr">{item.grade}</div> */}
               <div className="w-100pxr">{item.requestDate}</div>
+
               <ul
                 className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-                onClick={() => toggleDropdown(item.productCode)}
+                onClick={() => toggleDropdown(item.productId)}
               >
-                상태 드롭 다운 추가
                 <div className="flex items-center px-8pxr py-8pxr">
-                  <div>{item.state || "반송 전"}</div>
+                  <div className="">
+                    {item.state === "반송 미요청" || item.state === "반송 요청"
+                      ? "반송 전"
+                      : item.state}
+                  </div>
                   <div className="ml-auto">
-                    {view[item.productCode] ? (
+                    {view[item.productId] ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -119,22 +137,14 @@ export default function RejectedProduct({ rejectedItems, onStateChange }: any) {
                     )}
                   </div>
                 </div>
-                {view[item.productCode] && (
-                  <div className="absolute text-13pxr w-134pxr bg-white border border-gray-300 rounded shadow-lg">
-                    {["반송 전", "반송 완료"].map((state) => (
-                      <div
-                        key={state}
-                        className={`px-4 py-2 cursor-pointer ${
-                          item.state === state ? "font-bold" : ""
-                        } hover:bg-gray-100`}
-                        onClick={() =>
-                          handleStateChange(state, item.productCode)
-                        }
-                      >
-                        {state}
-                      </div>
-                    ))}
-                  </div>
+                {view[item.productId] && (
+                  <ReExDropdown
+                    item={item}
+                    setItems={setUserItems}
+                    page={"0"}
+                    size={"4"}
+                    onStateChange={fetchItems} // 콜백 함수 전달
+                  />
                 )}
               </ul>
             </div>
