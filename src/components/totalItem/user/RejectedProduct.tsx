@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
 import Image from "next/image";
-import { getClothingSalesDetails } from "@/api/request";
+import { getClothingSalesDetails, updateProductReturn } from "@/api/request";
 import ReExDropdown from "../dropdown/ReExDropdown";
 
 export default function RejectedProduct({
@@ -59,6 +59,23 @@ export default function RejectedProduct({
     };
   }, [view]);
 
+  // 일괄 반송 완료 함수
+  const handleBulkReturnComplete = async () => {
+    try {
+      // 모든 아이템에 대해 상태 업데이트 API 호출
+      await Promise.all(
+        userItems.map((item: any) =>
+          updateProductReturn("반송 완료", item.productId)
+        )
+      );
+
+      // 데이터 재로드 트리거 활성화
+      setReloadTrigger((prev) => !prev);
+    } catch (error) {
+      console.error("Error in bulk return completion:", error);
+    }
+  };
+
   return (
     <div className="w-1216pxr h-1038pxr border-1pxr border-solid border-dark-gray bg-white ml-32pxr">
       <div className="mt-28pxr ml-40pxr w-1144pxr">
@@ -66,7 +83,10 @@ export default function RejectedProduct({
           <div className="text-16pxr font-medium leading-24pxr">
             전체 {userItems?.length ?? 0}개
           </div>
-          <div className="flex items-center justify-center bg-nav-color text-background-color rounded-10pxr w-120pxr h-36pxr cursor-pointer">
+          <div
+            className="flex items-center justify-center bg-nav-color text-background-color rounded-10pxr w-120pxr h-36pxr cursor-pointer"
+            onClick={handleBulkReturnComplete}
+          >
             일괄 반송 완료
           </div>
         </div>
