@@ -13,12 +13,19 @@ export default function ReExDropdown({
   size,
   onStateChange,
 }: any) {
-  const [currentState, setCurrentState] = useState(item.state);
+  const [currentState, setCurrentState] = useState(
+    item.state === "반송 미요청" || item.state === "반송 요청"
+      ? "반송 전"
+      : item.state
+  );
 
   const handleStateChange = async (newState: string) => {
     try {
+      // 상태 변환 로직
+      const apiState = newState === "반송 전" ? "반송 요청" : newState;
+
       // 상태 업데이트 요청
-      await updateProductReturn(newState, item.productOrderId);
+      await updateProductReturn(apiState, item.productId);
 
       // 변경된 상태를 로컬 상태에 반영
       setCurrentState(newState);
@@ -31,6 +38,7 @@ export default function ReExDropdown({
       console.error("error", error);
     }
   };
+
   return (
     <div>
       <div className="absolute" onClick={(e) => e.stopPropagation()}>

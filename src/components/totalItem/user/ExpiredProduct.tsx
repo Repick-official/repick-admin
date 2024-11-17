@@ -3,19 +3,17 @@ import { useState, useEffect } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
 import Image from "next/image";
 import { getClothingSalesDetails } from "@/api/request";
+import ReExDropdown from "../dropdown/ReExDropdown";
 
 export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
-  const [userItems, setUserItems] = useState<any[]>([]);
-  const [items, setItems] = useState(expiredItems.result.content);
+  const [userItems, setUserItems] = useState<any>(
+    expiredItems?.result?.content
+  );
+  //const [items, setItems] = useState(expiredItems.result.content);
 
-  useEffect(() => {
-    if (expiredItems?.result?.content) {
-      setUserItems(expiredItems.result.content);
-    }
-  }, [expiredItems]);
-
-  console.log("expiredItems", expiredItems);
+  const [page, setPage] = useState(0); // 현재 페이지 상태
+  const size = 10; // 페이지당 아이템 수
 
   const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
@@ -24,19 +22,16 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
     const updatedReturns = await getClothingSalesDetails(
       clothingSalesId,
       "selling-end",
-      "0",
-      "4"
+      String(page),
+      String(size)
     );
-    setItems(updatedReturns.result.content);
+    setUserItems(updatedReturns.result.content);
   };
+
   // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
-  useEffect(
-    () => {
-      fetchItems();
-    },
-    // [page, reloadTrigger]
-    [reloadTrigger]
-  );
+  useEffect(() => {
+    fetchItems();
+  }, [page, reloadTrigger]);
 
   const handleClickOutside = (event: any) => {
     if (
@@ -50,7 +45,7 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
   const toggleDropdown = (id: string) => {
     setView((prevView) => ({
       ...prevView,
-      [id]: !prevView[id],
+      [id]: !prevView[id], // 현재 아이템의 상태만 토글
     }));
   };
 
@@ -82,7 +77,7 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
           </div>
         </div>
 
-        {userItems?.map((item) => (
+        {userItems?.map((item: any) => (
           <div key={item.index}>
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
@@ -101,12 +96,16 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
 
               <ul
                 className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-                onClick={() => toggleDropdown(item.productCode)}
+                onClick={() => toggleDropdown(item.productId)}
               >
                 <div className="flex items-center px-8pxr py-8pxr">
-                  <div className="">{item.state}</div>
+                  <div className="">
+                    {item.state === "반송 미요청" || item.state === "반송 요청"
+                      ? "반송 전"
+                      : item.state}
+                  </div>
                   <div className="ml-auto">
-                    {view[item.productCode] ? (
+                    {view[item.productId] ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -135,15 +134,15 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
                     )}
                   </div>
                 </div>
-                {/* {view[item.productOrderId] && (
-                  <ReturnDropdown
+                {view[item.productId] && (
+                  <ReExDropdown
                     item={item}
-                    setItems={setItems}
-                    page={page}
-                    size={size}
+                    setItems={setUserItems}
+                    page={"0"}
+                    size={"4"}
                     onStateChange={fetchItems} // 콜백 함수 전달
                   />
-                )} */}
+                )}
               </ul>
             </div>
             <div className="h-1pxr w-full bg-dark-gray"></div>

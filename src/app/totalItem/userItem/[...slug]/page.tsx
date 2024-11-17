@@ -228,7 +228,12 @@ export default function Page() {
               {selectedButtons[0] && <SellingProduct clothing={items} />}
               {selectedButtons[1] && <SoldProduct clothing={items} />}
               {selectedButtons[2] && <RejectedProduct rejectedItems={items} />}
-              {selectedButtons[3] && <ExpiredProduct expiredItems={items} />}
+              {selectedButtons[3] && (
+                <ExpiredProduct
+                  expiredItems={items}
+                  clothingSalesId={clothingSalesId}
+                />
+              )}
               {selectedButtons[4] && <KGProduct items={items} />}
             </div>
           </div>
