@@ -239,7 +239,9 @@ export default function Page() {
                   clothingSalesId={clothingSalesId}
                 />
               )}
-              {selectedButtons[4] && <KGProduct items={items} />}
+              {selectedButtons[4] && (
+                <KGProduct items={items} clothingSalesId={clothingSalesId} />
+              )}
             </div>
           </div>
         }
