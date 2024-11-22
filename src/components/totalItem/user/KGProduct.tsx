@@ -5,11 +5,14 @@ import { getClothingSalesDetails, updateProductReturn } from "@/api/request";
 export default function KGProduct({ items, clothingSalesId }: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
   const [userItems, setUserItems] = useState<any[]>(items?.result?.content);
+  const [inputKg, setInputKg] = useState("");
+  const [inputPoint, setInputPoint] = useState("");
 
   const [page, setPage] = useState(0); // 현재 페이지 상태
   const size = 10; // 페이지당 아이템 수
 
   const [isExpired, setIsExpired] = useState(false);
+  const [arrow, setArrow] = useState(false);
 
   const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
@@ -28,7 +31,7 @@ export default function KGProduct({ items, clothingSalesId }: any) {
   // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
     fetchItems();
-  }, [page, reloadTrigger]);
+  }, [page, reloadTrigger, isExpired]);
 
   const handleClickOutside = (event: any) => {
     if (
@@ -39,11 +42,10 @@ export default function KGProduct({ items, clothingSalesId }: any) {
     }
   };
 
-  const toggleDropdown = (id: string) => {
-    setView((prevView) => ({
-      ...prevView,
-      [id]: !prevView[id],
-    }));
+  const handleDropdownClick = (value: boolean) => {
+    setIsExpired(value);
+    setArrow(false); // 드롭다운 닫기
+    setReloadTrigger((prev) => !prev); // 데이터 리로드 트리거
   };
 
   useEffect(() => {
@@ -56,6 +58,74 @@ export default function KGProduct({ items, clothingSalesId }: any) {
   return (
     <div className="w-1216pxr h-1038pxr border-1pxr border-solid border-dark-gray bg-white ml-32pxr">
       <div className="mt-28pxr ml-40pxr w-1144pxr">
+        <div>
+          <div className="flex text-14pxr font-medium items-center">
+            <div className="text-unSelected-color">총 KG</div>
+            <input
+              className="border-1pxr border-solid border-box-color w-161pxr h-36pxr rounded-8pxr ml-16pxr pl-13pxr"
+              value={inputKg}
+              onChange={(e) => setInputKg(e.target.value)}
+            />
+            <div className="text-unSelected-color ml-28pxr">적립 포인트</div>
+            <input
+              className="border-1pxr border-solid border-box-color w-161pxr h-36pxr rounded-8pxr ml-16pxr pl-13pxr"
+              value={inputPoint}
+              onChange={(e) => setInputPoint(e.target.value)}
+            />
+            <div className="flex items-center justify-center bg-nav-color text-background-color rounded-10pxr w-68pxr h-36pxr cursor-pointer ml-16pxr">
+              저장
+            </div>
+          </div>
+          <div
+            className="relative w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray text-13pxr flex items-center pl-12pxr pr-12pxr ml-auto justify-between"
+            onClick={() => setArrow(!arrow)}
+          >
+            {isExpired ? "만료 상품" : "리젝 상품"}
+            {arrow ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M5.59056 13.0889C5.26512 13.4144 4.73748 13.4144 4.41205 13.0889C4.08661 12.7635 4.08661 12.2359 4.41205 11.9104L9.41205 6.91042C9.73748 6.58498 10.2651 6.58498 10.5906 6.91042L15.5906 11.9104C15.916 12.2359 15.916 12.7635 15.5906 13.0889C15.2651 13.4144 14.7375 13.4144 14.412 13.0889L10.0013 8.67819L5.59056 13.0889Z"
+                  fill="#1D2939"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M5.59056 6.91107C5.26512 6.58563 4.73748 6.58563 4.41205 6.91107C4.08661 7.23651 4.08661 7.76414 4.41205 8.08958L9.41205 13.0896C9.73748 13.415 10.2651 13.415 10.5906 13.0896L15.5906 8.08958C15.916 7.76414 15.916 7.23651 15.5906 6.91107C15.2651 6.58563 14.7375 6.58563 14.412 6.91107L10.0013 11.3218L5.59056 6.91107Z"
+                  fill="#1D2939"
+                />
+              </svg>
+            )}
+            {arrow && (
+              <div className="absolute top-36pxr left-0 w-134pxr bg-white border-1pxr border-solid border-dark-gray rounded-8pxr shadow-lg z-10 mt-14pxr">
+                <div
+                  className="px-12pxr py-8pxr hover:bg-circle-gray cursor-pointer"
+                  onClick={() => handleDropdownClick(true)} // 만료 상품 선택
+                >
+                  만료 상품
+                </div>
+                <div
+                  className="px-12pxr py-8pxr hover:bg-circle-gray cursor-pointer"
+                  onClick={() => handleDropdownClick(false)} // 리젝 상품 선택
+                >
+                  리젝 상품
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="flex">
           <div className="text-16pxr font-medium leading-24pxr">
             전체 {userItems?.length ?? 0}개
