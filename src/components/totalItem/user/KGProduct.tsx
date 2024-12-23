@@ -2,14 +2,17 @@
 import { useState, useEffect } from "react";
 import { getClothingSalesDetails, updateProductReturn } from "@/api/request";
 
-export default function KGProduct({ items, clothingSalesId }: any) {
+export default function KGProduct({
+  items,
+  clothingSalesId,
+  handlePageChange,
+  page,
+  size,
+}: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
   const [userItems, setUserItems] = useState<any[]>(items?.result?.content);
   const [inputKg, setInputKg] = useState("");
   const [inputPoint, setInputPoint] = useState("");
-
-  const [page, setPage] = useState(0); // 현재 페이지 상태
-  const size = 10; // 페이지당 아이템 수
 
   const [isExpired, setIsExpired] = useState(false);
   const [arrow, setArrow] = useState(false);
@@ -161,6 +164,37 @@ export default function KGProduct({ items, clothingSalesId }: any) {
           </div>
         ))}
         <div className="h-1pxr w-full bg-dark-gray"></div>
+
+        {/* 페이지네이션 버튼 */}
+        <div className="pagination mt-16pxr flex justify-center space-x-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 border rounded"
+          >
+            이전
+          </button>
+
+          {[...Array(items?.result.totalPages || 1)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-3 py-1 border rounded ${
+                index === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={items && page + 1 >= items.result.totalPages}
+            className="px-4 py-2 border rounded"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );

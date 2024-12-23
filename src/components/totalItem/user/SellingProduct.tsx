@@ -2,9 +2,14 @@
 import { useState, useEffect, use } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
 
-export default function SellingProduct({ clothing }: any) {
+export default function SellingProduct({
+  clothing,
+  handlePageChange,
+  page,
+  size,
+}: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
-  const [userItems, setUserItems] = useState<any[]>([]);
+  const [userItems, setUserItems] = useState<any>([]);
 
   useEffect(() => {
     if (clothing?.result?.content) {
@@ -60,7 +65,7 @@ export default function SellingProduct({ clothing }: any) {
           </div>
         </div>
 
-        {userItems?.map((item) => (
+        {userItems?.map((item: any) => (
           <div key={item.productCode}>
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
@@ -112,10 +117,43 @@ export default function SellingProduct({ clothing }: any) {
                 </div>
               </ul>
             </div>
+
             <div className="h-1pxr w-full bg-dark-gray"></div>
           </div>
         ))}
+
         <div className="h-1pxr w-full bg-dark-gray"></div>
+
+        {/* 페이지네이션 버튼 */}
+        <div className="pagination mt-16pxr flex justify-center space-x-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 border rounded"
+          >
+            이전
+          </button>
+
+          {[...Array(clothing?.result.totalPages || 1)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-3 py-1 border rounded ${
+                index === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={clothing && page + 1 >= clothing.result.totalPages}
+            className="px-4 py-2 border rounded"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );

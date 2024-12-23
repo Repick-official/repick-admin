@@ -5,15 +5,18 @@ import Image from "next/image";
 import { getClothingSalesDetails, updateProductReturn } from "@/api/request";
 import ReExDropdown from "../dropdown/ReExDropdown";
 
-export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
+export default function ExpiredProduct({
+  expiredItems,
+  clothingSalesId,
+  handlePageChange,
+  page,
+  size,
+}: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
   const [userItems, setUserItems] = useState<any>(
     expiredItems?.result?.content
   );
   //const [items, setItems] = useState(expiredItems.result.content);
-
-  const [page, setPage] = useState(0); // 현재 페이지 상태
-  const size = 10; // 페이지당 아이템 수
 
   const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
@@ -158,8 +161,8 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
                   <ReExDropdown
                     item={item}
                     setItems={setUserItems}
-                    page={"0"}
-                    size={"4"}
+                    page={page}
+                    size={size}
                     onStateChange={fetchItems} // 콜백 함수 전달
                   />
                 )}
@@ -169,6 +172,39 @@ export default function ExpiredProduct({ expiredItems, clothingSalesId }: any) {
           </div>
         ))}
         <div className="h-1pxr w-full bg-dark-gray"></div>
+
+        {/* 페이지네이션 버튼 */}
+        <div className="pagination mt-16pxr flex justify-center space-x-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 border rounded"
+          >
+            이전
+          </button>
+
+          {[...Array(expiredItems?.result.totalPages || 1)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-3 py-1 border rounded ${
+                index === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={
+              expiredItems && page + 1 >= expiredItems.result.totalPages
+            }
+            className="px-4 py-2 border rounded"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );
