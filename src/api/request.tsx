@@ -98,17 +98,13 @@ export const updateOrderState = async (
 export const getClothingSales = async (
   page: string,
   size: string,
-  userId?: number
+  type: string = "latest" // 기본값으로 "latest" 설정,
 ) => {
   try {
-    const url = new URL(process.env.API_URL + "/product/count");
-    if (userId !== undefined) {
-      url.searchParams.append("userId", userId.toString());
-    }
-    url.searchParams.append("page", page);
-    url.searchParams.append("size", size);
+    // URL에 동적으로 파라미터 추가
+    let url = `${process.env.API_URL}/product/count?type=${type}&page=${page}&size=${size}`;
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
