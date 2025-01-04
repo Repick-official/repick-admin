@@ -1,21 +1,43 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
+import {
+  getClothingSalesDetails,
+  updateProductReturn,
+  updateProductState,
+} from "@/api/request";
+import SellingDropdown from "../dropdown/SellingDropdown";
 
 export default function SellingProduct({
   clothing,
+  clothingSalesId,
   handlePageChange,
   page,
   size,
 }: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
   const [userItems, setUserItems] = useState<any>([]);
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
+  const fetchItems = async () => {
+    const updatedReturns = await getClothingSalesDetails(
+      clothingSalesId,
+      "selling",
+      String(page),
+      String(size)
+    );
+    setUserItems(updatedReturns.result.content);
+  };
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
-    if (clothing?.result?.content) {
-      setUserItems(clothing.result.content);
-    }
-  }, [clothing]);
+    fetchItems();
+  }, [page, reloadTrigger]);
+
+  // useEffect(() => {
+  //   if (clothing?.result?.content) {
+  //     setUserItems(clothing.result.content);
+  //   }
+  // }, [clothing]);
 
   console.log("Sellingitems", clothing);
 
@@ -81,12 +103,12 @@ export default function SellingProduct({
 
               <ul
                 className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-                onClick={() => toggleDropdown(item.productCode)}
+                onClick={() => toggleDropdown(item.productId)}
               >
                 <div className="flex items-center px-8pxr py-8pxr">
-                  <div>{item.isReturned ? "반품" : "판매 중"}</div>
+                  <div>{"판매 중"}</div>
                   <div className="ml-auto">
-                    {view[item.productCode] ? (
+                    {view[item.productId] ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -115,6 +137,15 @@ export default function SellingProduct({
                     )}
                   </div>
                 </div>
+                {view[item.productId] && (
+                  <SellingDropdown
+                    item={item}
+                    setItems={setUserItems}
+                    page={page}
+                    size={size}
+                    onStateChange={fetchItems} // 콜백 함수 전달
+                  />
+                )}
               </ul>
             </div>
 

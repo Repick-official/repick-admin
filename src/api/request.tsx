@@ -363,3 +363,33 @@ export const updateProductReturn = async (
     throw error;
   }
 };
+export const updateProductState = async (
+  returnState: string,
+  productId: string
+) => {
+  try {
+    const formData = new FormData();
+    formData.append(
+      "patchProduct",
+      JSON.stringify({
+        productState: returnState,
+      })
+    );
+    const response = await fetch(
+      process.env.API_URL + `/product/${productId}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      const errorData = await response.json();
+      throw new Error("Error fetching poll types", errorData);
+    }
+  } catch (error) {
+    throw error;
+  }
+};

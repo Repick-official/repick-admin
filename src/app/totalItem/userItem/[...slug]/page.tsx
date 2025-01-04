@@ -237,6 +237,7 @@ export default function Page() {
               {selectedButtons[0] && (
                 <SellingProduct
                   clothing={items}
+                  clothingSalesId={clothingSalesId}
                   handlePageChange={handlePageChange}
                   page={page}
                   size={size}
@@ -245,6 +246,7 @@ export default function Page() {
               {selectedButtons[1] && (
                 <SoldProduct
                   clothing={items}
+                  clothingSalesId={clothingSalesId}
                   handlePageChange={handlePageChange}
                   page={page}
                   size={size}
