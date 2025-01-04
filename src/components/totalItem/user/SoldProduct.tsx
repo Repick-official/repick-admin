@@ -1,21 +1,43 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
+import {
+  getClothingSalesDetails,
+  updateProductReturn,
+  updateProductState,
+} from "@/api/request";
+import SoldDropdown from "../dropdown/SoldDropdown";
 
 export default function SoldProduct({
   clothing,
+  clothingSalesId,
   handlePageChange,
   page,
   size,
 }: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
   const [userItems, setUserItems] = useState<any[]>([]);
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
+  const fetchItems = async () => {
+    const updatedReturns = await getClothingSalesDetails(
+      clothingSalesId,
+      "sold-out",
+      String(page),
+      String(size)
+    );
+    setUserItems(updatedReturns.result.content);
+  };
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
-    if (clothing?.result?.content) {
-      setUserItems(clothing.result.content);
-    }
-  }, [clothing]);
+    fetchItems();
+  }, [page, reloadTrigger]);
+
+  // useEffect(() => {
+  //   if (clothing?.result?.content) {
+  //     setUserItems(clothing.result.content);
+  //   }
+  // }, [clothing]);
 
   console.log("Solditems", clothing);
 
@@ -79,10 +101,10 @@ export default function SoldProduct({
 
               <ul
                 className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-                onClick={() => toggleDropdown(item.productCode)}
+                onClick={() => toggleDropdown(item.productId)}
               >
                 <div className="flex items-center px-8pxr py-8pxr">
-                  <div>{item.isReturned ? "반품" : "판매 중"}</div>
+                  <div>{"판매완료"}</div>
                   <div className="ml-auto">
                     {view[item.productCode] ? (
                       <svg
@@ -113,6 +135,15 @@ export default function SoldProduct({
                     )}
                   </div>
                 </div>
+                {view[item.productId] && (
+                  <SoldDropdown
+                    item={item}
+                    setItems={setUserItems}
+                    page={page}
+                    size={size}
+                    onStateChange={fetchItems} // 콜백 함수 전달
+                  />
+                )}
               </ul>
             </div>
             <div className="h-1pxr w-full bg-dark-gray"></div>
