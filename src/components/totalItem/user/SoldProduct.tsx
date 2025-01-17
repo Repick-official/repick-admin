@@ -7,6 +7,7 @@ import {
   updateProductState,
 } from "@/api/request";
 import SoldDropdown from "../dropdown/SoldDropdown";
+import Image from "next/image";
 
 export default function SoldProduct({
   clothing,
@@ -90,7 +91,13 @@ export default function SoldProduct({
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
               <div className="flex items-center w-239pxr">
-                <div className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray"></div>
+                <Image
+                  src={item.thumbnailImageUrl} // `decodeURI` 사용
+                  alt={item.productName}
+                  width={60}
+                  height={60}
+                  className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray object-cover rounded"
+                />
                 <div className="w-146pxr ml-12pxr">{item.productName}</div>
               </div>
               <div className="w-69pxr">{item.grade}</div>
