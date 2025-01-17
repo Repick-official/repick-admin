@@ -1,3 +1,5 @@
+import { addYears } from "react-datepicker/dist/date_utils";
+
 export const getRequestPurchase = async (page: string, size: string) => {
   try {
     const response = await fetch(
@@ -388,6 +390,36 @@ export const updateProductState = async (
     } else {
       const errorData = await response.json();
       throw new Error("Error fetching poll types", errorData);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateKgSell = async (
+  clothingSalesId: number,
+  weight: string,
+  point: string
+) => {
+  try {
+    const response = await fetch(
+      process.env.API_URL + `/clothing-sales/kg-sell`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clothingSalesId: clothingSalesId,
+          weight: weight,
+          point: point,
+        }),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
     }
   } catch (error) {
     throw error;

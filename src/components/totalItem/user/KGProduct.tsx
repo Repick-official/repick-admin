@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getClothingSalesDetails, updateProductReturn } from "@/api/request";
+import {
+  getClothingSalesDetails,
+  updateKgSell,
+  updateProductReturn,
+} from "@/api/request";
 
 export default function KGProduct({
   items,
@@ -14,7 +18,7 @@ export default function KGProduct({
   const [inputKg, setInputKg] = useState("");
   const [inputPoint, setInputPoint] = useState("");
 
-  const [isExpired, setIsExpired] = useState(false);
+  const [isExpired, setIsExpired] = useState(true);
   const [arrow, setArrow] = useState(false);
 
   const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
@@ -29,7 +33,27 @@ export default function KGProduct({
     );
     setUserItems(updatedReturns.result.content);
   };
-  console.log("kkkkkkkk", userItems);
+  console.log("kkkkkkkk", userItems, clothingSalesId);
+
+  const handleSave = async () => {
+    if (!inputKg || !inputPoint) {
+      alert("kg와 포인트를 입력해주세요.");
+      return;
+    }
+    try {
+      const response = await updateKgSell(clothingSalesId, inputKg, inputPoint);
+
+      if (response) {
+        alert("성공적으로 저장되었습니다.");
+        setReloadTrigger((prev) => !prev); // 데이터 리로드 트리거
+        setInputKg("");
+        setInputPoint("");
+      }
+    } catch (error) {
+      console.error("Error updating KG Sell:", error);
+      alert("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
 
   // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
@@ -75,7 +99,10 @@ export default function KGProduct({
               value={inputPoint}
               onChange={(e) => setInputPoint(e.target.value)}
             />
-            <div className="flex items-center justify-center bg-nav-color text-background-color rounded-10pxr w-68pxr h-36pxr cursor-pointer ml-16pxr">
+            <div
+              className="flex items-center justify-center bg-nav-color text-background-color rounded-10pxr w-68pxr h-36pxr cursor-pointer ml-16pxr"
+              onClick={handleSave}
+            >
               저장
             </div>
           </div>
