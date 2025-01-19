@@ -41,6 +41,11 @@ export default function Page() {
     false,
   ]);
 
+  const [page, setPage] = useState(0); // 현재 페이지 상태
+  const size = 6; // 페이지당 아이템 수
+  // 데이터 재로드 트리거
+  const [reloadTrigger, setReloadTrigger] = useState(false);
+
   const handleButtonClick = (index: number) => {
     const updatedButtons = selectedButtons.map((_, i) => i === index);
     setSelectedButtons(updatedButtons);
@@ -68,7 +73,6 @@ export default function Page() {
   };
 
   const fetchTotalElementsForAllStates = async () => {
-    console.log("fetchTotalElementsForAllStates called");
     console.log("clothingSalesId:", clothingSalesId); // 디버깅을 위해 추가
 
     const states = [
@@ -87,8 +91,8 @@ export default function Page() {
             const response = await getClothingSalesDetails(
               clothingSalesId,
               status,
-              "0",
-              "4"
+              String(page),
+              String(size)
             );
             return response;
           } catch (error) {
@@ -98,8 +102,6 @@ export default function Page() {
         })
       );
 
-      console.log("API Responses:", responses); // 응답값 디버깅
-
       const totalElementsResult = {
         selling: responses[0]?.result?.totalElements || 0,
         soldOut: responses[1]?.result?.totalElements || 0,
@@ -107,9 +109,7 @@ export default function Page() {
         sellingEnd: responses[3]?.result?.totalElements || 0,
         kgSell: responses[4]?.result?.totalElements || 0,
       };
-      console.log("Total Elements:", totalElementsResult); // 디버깅
 
-      // 상태 업데이트
       setTotalElements(totalElementsResult);
     } catch (error) {
       console.error("Error fetching total elements:", error);
@@ -122,13 +122,35 @@ export default function Page() {
       const result = await getClothingSalesDetails(
         clothingSalesId, // path 파라미터
         state, // path 파라미터 (productState)
-        "0", // query 파라미터 (page)
-        "4" // query 파라미터 (size)
+        String(page),
+        String(size)
       );
       setItems(result);
       console.log("result", result);
     } catch (error) {
       console.error("Error fetching items for selected state:", error);
+    }
+  };
+
+  // 트리거를 통해 데이터 재로드 가능하도록 설정
+  const fetchItems = async () => {
+    try {
+      const result = await getClothingSalesDetails(
+        clothingSalesId,
+        state,
+        String(page),
+        String(size)
+      );
+      setItems(result?.result?.content);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  // 페이지 변경 함수
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 0 && (!items || newPage < items.result.totalPages)) {
+      setPage(newPage);
     }
   };
 
@@ -138,7 +160,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchItemsForSelectedState(); // 선택된 상태의 아이템 불러오기
-  }, [state]);
+  }, [state, page, reloadTrigger]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -223,13 +245,53 @@ export default function Page() {
                 </div>
               ))}
             </div>
-            {/* <SellingOrSold clothing={items} /> */}
+
             <div className="mt-24pxr">
-              {selectedButtons[0] && <SellingProduct clothing={items} />}
-              {selectedButtons[1] && <SoldProduct clothing={items} />}
-              {selectedButtons[2] && <RejectedProduct rejectedItems={items} />}
-              {selectedButtons[3] && <ExpiredProduct expiredItems={items} />}
-              {selectedButtons[4] && <KGProduct items={items} />}
+              {selectedButtons[0] && (
+                <SellingProduct
+                  clothing={items}
+                  clothingSalesId={clothingSalesId}
+                  handlePageChange={handlePageChange}
+                  page={page}
+                  size={size}
+                />
+              )}
+              {selectedButtons[1] && (
+                <SoldProduct
+                  clothing={items}
+                  clothingSalesId={clothingSalesId}
+                  handlePageChange={handlePageChange}
+                  page={page}
+                  size={size}
+                />
+              )}
+              {selectedButtons[2] && (
+                <RejectedProduct
+                  rejectedItems={items}
+                  clothingSalesId={clothingSalesId}
+                  handlePageChange={handlePageChange}
+                  page={page}
+                  size={size}
+                />
+              )}
+              {selectedButtons[3] && (
+                <ExpiredProduct
+                  expiredItems={items}
+                  clothingSalesId={clothingSalesId}
+                  handlePageChange={handlePageChange}
+                  page={page}
+                  size={size}
+                />
+              )}
+              {selectedButtons[4] && (
+                <KGProduct
+                  items={items}
+                  clothingSalesId={clothingSalesId}
+                  handlePageChange={handlePageChange}
+                  page={page}
+                  size={size}
+                />
+              )}
             </div>
           </div>
         }

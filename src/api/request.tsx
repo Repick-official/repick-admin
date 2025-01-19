@@ -1,3 +1,5 @@
+import { addYears } from "react-datepicker/dist/date_utils";
+
 export const getRequestPurchase = async (page: string, size: string) => {
   try {
     const response = await fetch(
@@ -98,17 +100,13 @@ export const updateOrderState = async (
 export const getClothingSales = async (
   page: string,
   size: string,
-  userId?: number
+  type: string = "latest" // 기본값으로 "latest" 설정,
 ) => {
   try {
-    const url = new URL(process.env.API_URL + "/product/count");
-    if (userId !== undefined) {
-      url.searchParams.append("userId", userId.toString());
-    }
-    url.searchParams.append("page", page);
-    url.searchParams.append("size", size);
+    // URL에 동적으로 파라미터 추가
+    let url = `${process.env.API_URL}/product/count?type=${type}&page=${page}&size=${size}`;
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -332,6 +330,91 @@ export const getUserStatistics = async () => {
         Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
     });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateProductReturn = async (
+  returnState: string,
+  productIds: number
+) => {
+  try {
+    const response = await fetch(process.env.API_URL + `/product/return`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        returnState: returnState,
+        productIds: [productIds],
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Error fetching poll types");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateProductState = async (
+  returnState: string,
+  productId: string
+) => {
+  try {
+    const formData = new FormData();
+    formData.append(
+      "patchProduct",
+      JSON.stringify({
+        productState: returnState,
+      })
+    );
+    const response = await fetch(
+      process.env.API_URL + `/product/${productId}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      const errorData = await response.json();
+      throw new Error("Error fetching poll types", errorData);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateKgSell = async (
+  clothingSalesId: number,
+  weight: string,
+  point: string
+) => {
+  try {
+    const response = await fetch(
+      process.env.API_URL + `/clothing-sales/kg-sell`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clothingSalesId: clothingSalesId,
+          weight: weight,
+          point: point,
+        }),
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       return data;

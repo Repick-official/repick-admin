@@ -1,16 +1,44 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import { ClothingSalesItemStatus } from "@/interface/interface";
+import {
+  getClothingSalesDetails,
+  updateProductReturn,
+  updateProductState,
+} from "@/api/request";
+import SellingDropdown from "../dropdown/SellingDropdown";
+import Image from "next/image";
 
-export default function SellingProduct({ clothing }: any) {
+export default function SellingProduct({
+  clothing,
+  clothingSalesId,
+  handlePageChange,
+  page,
+  size,
+}: any) {
   const [view, setView] = useState<{ [key: string]: boolean }>({});
-  const [userItems, setUserItems] = useState<any[]>([]);
+  const [userItems, setUserItems] = useState<any>([]);
+  const [reloadTrigger, setReloadTrigger] = useState(false); // 데이터 재로드 트리거
 
+  const fetchItems = async () => {
+    const updatedReturns = await getClothingSalesDetails(
+      clothingSalesId,
+      "selling",
+      String(page),
+      String(size)
+    );
+    setUserItems(updatedReturns.result.content);
+  };
+  // 페이지나 트리거가 변경될 때 데이터를 다시 가져오기
   useEffect(() => {
-    if (clothing?.result?.content) {
-      setUserItems(clothing.result.content);
-    }
-  }, [clothing]);
+    fetchItems();
+  }, [page, reloadTrigger]);
+
+  // useEffect(() => {
+  //   if (clothing?.result?.content) {
+  //     setUserItems(clothing.result.content);
+  //   }
+  // }, [clothing]);
 
   console.log("Sellingitems", clothing);
 
@@ -60,12 +88,18 @@ export default function SellingProduct({ clothing }: any) {
           </div>
         </div>
 
-        {userItems?.map((item) => (
+        {userItems?.map((item: any) => (
           <div key={item.productCode}>
             <div className="h-92pxr flex items-center text-14pxr font-normal leading-21pxr">
               <div className="ml-15pxr w-91pxr">{item.productCode}</div>
               <div className="flex items-center w-239pxr">
-                <div className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray"></div>
+                <Image
+                  src={item.thumbnailImageUrl} // `decodeURI` 사용
+                  alt={item.productName}
+                  width={60}
+                  height={60}
+                  className="w-60pxr h-60pxr border-1pxr border-solid border-circle-gray object-cover rounded"
+                />
                 <div className="w-146pxr ml-12pxr">{item.productName}</div>
               </div>
               <div className="w-69pxr">{item.grade}</div>
@@ -76,12 +110,12 @@ export default function SellingProduct({ clothing }: any) {
 
               <ul
                 className="w-134pxr h-36pxr cursor-pointer rounded-8pxr border-1pxr border-solid border-dark-gray dropdown-container"
-                onClick={() => toggleDropdown(item.productCode)}
+                onClick={() => toggleDropdown(item.productId)}
               >
                 <div className="flex items-center px-8pxr py-8pxr">
-                  <div>{item.isReturned ? "반품" : "판매 중"}</div>
+                  <div>{"판매 중"}</div>
                   <div className="ml-auto">
-                    {view[item.productCode] ? (
+                    {view[item.productId] ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -110,12 +144,54 @@ export default function SellingProduct({ clothing }: any) {
                     )}
                   </div>
                 </div>
+                {view[item.productId] && (
+                  <SellingDropdown
+                    item={item}
+                    setItems={setUserItems}
+                    page={page}
+                    size={size}
+                    onStateChange={fetchItems} // 콜백 함수 전달
+                  />
+                )}
               </ul>
             </div>
+
             <div className="h-1pxr w-full bg-dark-gray"></div>
           </div>
         ))}
+
         <div className="h-1pxr w-full bg-dark-gray"></div>
+
+        {/* 페이지네이션 버튼 */}
+        <div className="pagination mt-16pxr flex justify-center space-x-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 border rounded"
+          >
+            이전
+          </button>
+
+          {[...Array(clothing?.result.totalPages || 1)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`px-3 py-1 border rounded ${
+                index === page ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={clothing && page + 1 >= clothing.result.totalPages}
+            className="px-4 py-2 border rounded"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   );
